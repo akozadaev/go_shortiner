@@ -10,7 +10,7 @@ import (
 
 type ShortenRepository interface {
 	SaveLink(ctx context.Context, link *model.Link) error
-	FindLink(ctx context.Context, source string) model.Link
+	FindLink(ctx context.Context, shortened string) (model.Link, error)
 }
 
 func NewShortenRepository(db *gorm.DB) ShortenRepository {
@@ -35,7 +35,14 @@ func (s shortenRepository) SaveLink(ctx context.Context, links *model.Link) erro
 	return nil
 }
 
-func (s shortenRepository) FindLink(ctx context.Context, source string) model.Link {
-	//TODO implement me
-	panic("implement me")
+func (s shortenRepository) FindLink(ctx context.Context, shortened string) (model.Link, error) {
+	logger := logging.FromContext(ctx)
+	db := database.FromContext(ctx, s.db)
+	var err error
+	var links model.Link
+	if err = db.WithContext(ctx).First(&links, "shortened = ?", shortened).Error; err != nil {
+		logger.Errorw("failed to get link", "err", err)
+	}
+	links.Shortened = links.Shortened
+	return links, err
 }

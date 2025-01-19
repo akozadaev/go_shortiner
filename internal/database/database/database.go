@@ -1,6 +1,7 @@
 package database
 
 import (
+	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"time"
@@ -20,6 +21,8 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 
 	for i := 0; i <= 50; i++ {
 		db, err = gorm.Open(postgres.Open(cfg.DBConfig.DataSourceName), &gorm.Config{Logger: logger, TranslateError: true})
+		// Migrate the schema
+		db.AutoMigrate(&model.Link{})
 		if err == nil {
 			break
 		}

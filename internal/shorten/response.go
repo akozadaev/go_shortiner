@@ -23,7 +23,7 @@ func NewLinkResponse(sourcesLinks []model.CreateLink, host string) *LinkResponse
 		hashStr = GetMD5Hash(sl.Source)
 		link := Link{
 			Source:    sl.Source,
-			Shortened: host + hashStr,
+			Shortened: hashStr,
 		}
 		links = append(links, link)
 	}

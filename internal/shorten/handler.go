@@ -2,7 +2,7 @@ package shorten
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go_shurtiner/internal/http/handler"
 	"go_shurtiner/internal/http/helper"
@@ -31,11 +31,18 @@ func (h *Handler) getLink(c *gin.Context) {
 	handler.HandleRequest(c, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
 		logger.Debugw("getting link", "get")
-		return handler.NewInternalErrorResponse(errors.New("sdsd"))
-		/*		return handler.NewSuccessResponse(
-				http.StatusOK,
-				NewLinkResponse(h.cfg.ServerConfig. ),
-			)*/
+		linkStr := c.Param("link")
+		fmt.Println(linkStr)
+		res, err := h.shortenRepository.FindLink(c.Request.Context(), linkStr)
+		if err != nil {
+			return handler.NewInternalErrorResponse(err)
+		}
+
+		res.Shortened = fmt.Sprintf("%s%s", h.cfg.ServerConfig.Host, res.Shortened)
+		return handler.NewSuccessResponse(
+			http.StatusOK,
+			res,
+		)
 	})
 }
 
@@ -91,7 +98,7 @@ func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine) {
 	v1 := r.Group("v1")
 
 	{
-		v1.GET("/short", h.getLink)
+		v1.GET("/short/:link", h.getLink)
 		v1.POST("/short", h.createLink)
 	}
 
