@@ -1,9 +1,9 @@
 package shorten
 
 import (
-	"crypto/sha256"
-	"fmt"
-	"strconv"
+	"crypto/md5"
+	"encoding/hex"
+	"go_shurtiner/internal/shorten/model"
 )
 
 type Link struct {
@@ -12,16 +12,28 @@ type Link struct {
 }
 
 type LinkResponse struct {
-	Data Link `json:"data"`
+	Data []Link `json:"data"`
 }
 
-func NewLinkResponse(source string) *LinkResponse {
-	var hash = sha256.Sum256([]byte(source))
-	var hashStr, _ = fmt.Printf("%x", hash)
-	return &LinkResponse{
-		Data: Link{
-			Source:    source,
-			Shortened: strconv.Itoa(hashStr),
-		},
+func NewLinkResponse(sourcesLinks []model.CreateLink, host string) *LinkResponse {
+	var hashStr string
+	links := make([]Link, 0)
+	for _, sl := range sourcesLinks {
+
+		hashStr = GetMD5Hash(sl.Source)
+		link := Link{
+			Source:    sl.Source,
+			Shortened: host + hashStr,
+		}
+		links = append(links, link)
 	}
+
+	return &LinkResponse{
+		Data: links,
+	}
+}
+
+func GetMD5Hash(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
 }

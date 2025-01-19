@@ -13,12 +13,14 @@ func HandleRequest(c *gin.Context, f func(c *gin.Context) *Response) {
 		return
 	}
 	doneChan := make(chan *Response)
+	defer close(doneChan)
+
 	go func() {
 		doneChan <- f(c)
 	}()
 	select {
 	case <-ctx.Done():
-		// Nothing to do because err handled from timeout middleware
+		break
 	case res := <-doneChan:
 		handleRequestReal(c, res)
 	}

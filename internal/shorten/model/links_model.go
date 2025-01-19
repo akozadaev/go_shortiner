@@ -10,6 +10,10 @@ type Link struct {
 	Shortened string `gorm:"column:shortened;type:varchar(256);" json:"shortened"`
 }
 
+type CreateLink struct {
+	Source string `json:"url"`
+}
+
 func (l *Link) TableName() string {
 	return "link"
 }
