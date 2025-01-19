@@ -12,6 +12,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/fx v1.23.0
 	go.uber.org/zap v1.26.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 )

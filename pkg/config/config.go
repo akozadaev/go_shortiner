@@ -17,9 +17,19 @@ type Config struct {
 }
 
 type LoggingConfig struct {
-	Level       int    `json:"level"`
-	Encoding    string `json:"encoding"`
-	Development bool   `json:"development"`
+	Level           int    `json:"level"`
+	Encoding        string `json:"encoding"`
+	Development     bool   `json:"development"`
+	InfoFilename    string `json:"info_filename"`
+	InfoMaxSize     int    `json:"info_max_size"`
+	InfoMaxBackups  int    `json:"info_max_backups"`
+	InfoMaxAge      int    `json:"info_max_age"`
+	InfoCompress    bool   `json:"info_compress"`
+	ErrorFilename   string `json:"error_filename"`
+	ErrorMaxSize    int    `json:"error_max_size"`
+	ErrorMaxBackups int    `json:"error_max_backups"`
+	ErrorMaxAge     int    `json:"error_max_age"`
+	ErrorCompress   bool   `json:"error_compress"`
 }
 
 type ServerConfig struct {

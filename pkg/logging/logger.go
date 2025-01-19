@@ -2,11 +2,13 @@ package logging
 
 import (
 	"context"
+	"os"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type contextKey = string
@@ -27,18 +29,38 @@ var conf = &Config{
 }
 
 type Config struct {
-	Encoding    string
-	Level       zapcore.Level
-	Development bool
+	Encoding        string
+	Level           zapcore.Level
+	Development     bool
+	InfoFilename    string
+	InfoMaxSize     int
+	InfoMaxBackups  int
+	InfoMaxAge      int
+	InfoCompress    bool
+	ErrorFilename   string
+	ErrorMaxSize    int
+	ErrorMaxBackups int
+	ErrorMaxAge     int
+	ErrorCompress   bool
 }
 
 // SetConfig sets given logging configs for DefaultLogger's logger.
 // Must set configs before calling DefaultLogger()
 func SetConfig(c *Config) {
 	conf = &Config{
-		Encoding:    c.Encoding,
-		Level:       c.Level,
-		Development: c.Development,
+		Encoding:        c.Encoding,
+		Level:           c.Level,
+		Development:     c.Development,
+		InfoFilename:    c.InfoFilename,
+		InfoMaxSize:     c.InfoMaxSize,
+		InfoMaxBackups:  c.InfoMaxBackups,
+		InfoMaxAge:      c.InfoMaxAge,
+		InfoCompress:    c.InfoCompress,
+		ErrorFilename:   c.ErrorFilename,
+		ErrorMaxSize:    c.ErrorMaxSize,
+		ErrorMaxBackups: c.ErrorMaxBackups,
+		ErrorMaxAge:     c.ErrorMaxAge,
+		ErrorCompress:   c.ErrorCompress,
 	}
 }
 
@@ -48,20 +70,45 @@ func SetLevel(l zapcore.Level) {
 
 // NewLogger creates a new logger with the given log level
 func NewLogger(conf *Config) *zap.SugaredLogger {
-	ec := zap.NewProductionEncoderConfig()
-	ec.EncodeTime = zapcore.ISO8601TimeEncoder
-	cfg := zap.Config{
-		Encoding:         conf.Encoding,
-		EncoderConfig:    ec,
-		Level:            zap.NewAtomicLevelAt(conf.Level),
-		Development:      conf.Development,
-		OutputPaths:      []string{"stdout", "logs/application.log"},
-		ErrorOutputPaths: []string{"stderr", "logs/application_error.log"},
-	}
-	logger, err := cfg.Build()
-	if err != nil {
-		logger = zap.NewNop()
-	}
+	highPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl >= zapcore.ErrorLevel
+	})
+	lowPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl < zapcore.ErrorLevel
+	})
+
+	wsInfo := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   conf.InfoFilename,
+		MaxSize:    conf.InfoMaxSize, //MB
+		MaxBackups: conf.InfoMaxBackups,
+		MaxAge:     conf.InfoMaxAge, //days
+		Compress:   conf.InfoCompress,
+	})
+
+	wsError := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   conf.ErrorFilename,
+		MaxSize:    conf.ErrorMaxSize, //MB
+		MaxBackups: conf.ErrorMaxBackups,
+		MaxAge:     conf.ErrorMaxAge, //days
+		Compress:   conf.ErrorCompress,
+	})
+	coreInfo := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), wsInfo),
+		lowPriority,
+	)
+
+	coreError := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), wsError),
+		highPriority,
+	)
+
+	cores := zapcore.NewTee(coreInfo, coreError)
+
+	logger := zap.New(cores)
+	defer logger.Sync()
+
 	return logger.Sugar()
 }
 

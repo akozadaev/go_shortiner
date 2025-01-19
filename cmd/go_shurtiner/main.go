@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"go_shurtiner/internal/database/database"
 	"go_shurtiner/internal/http/middleware"
+	"go_shurtiner/internal/shorten"
+	shortenRepository "go_shurtiner/internal/shorten/datebase"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"net/http"
@@ -49,9 +51,18 @@ func runApplication() {
 	}
 
 	logging.SetConfig(&logging.Config{
-		Encoding:    serverConfig.LoggingConfig.Encoding,
-		Level:       loggerLevel,
-		Development: serverConfig.LoggingConfig.Development,
+		Encoding:        serverConfig.LoggingConfig.Encoding,
+		Level:           loggerLevel,
+		InfoFilename:    serverConfig.LoggingConfig.InfoFilename,
+		InfoMaxSize:     serverConfig.LoggingConfig.InfoMaxSize,
+		InfoMaxBackups:  serverConfig.LoggingConfig.InfoMaxBackups,
+		InfoMaxAge:      serverConfig.LoggingConfig.InfoMaxAge,
+		InfoCompress:    serverConfig.LoggingConfig.InfoCompress,
+		ErrorFilename:   serverConfig.LoggingConfig.ErrorFilename,
+		ErrorMaxSize:    serverConfig.LoggingConfig.ErrorMaxSize,
+		ErrorMaxBackups: serverConfig.LoggingConfig.ErrorMaxBackups,
+		ErrorMaxAge:     serverConfig.LoggingConfig.ErrorMaxAge,
+		ErrorCompress:   serverConfig.LoggingConfig.ErrorCompress,
 	})
 	defer logging.DefaultLogger().Sync()
 
@@ -67,8 +78,11 @@ func runApplication() {
 			database.NewDatabase,
 			// server
 			newServer,
+			shortenRepository.NewShortenRepository,
+			shorten.NewHandler,
 		),
 		fx.Invoke(
+			shorten.RouteV1,
 			func(r *gin.Engine) {},
 		),
 	)

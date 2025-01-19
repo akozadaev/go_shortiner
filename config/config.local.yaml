@@ -15,3 +15,13 @@ logging:
   level: -1
   encoding: console
   development: true
+  info_filename: "logs/application.log"
+  info_max_size: 100
+  info_max_backups: 30
+  info_max_age: 90
+  info_compress: true
+  error_filename: "logs/application_error.log"
+  error_max_size: 100
+  error_max_backups: 30
+  error_max_age: 90
+  error_compress: true

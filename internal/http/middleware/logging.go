@@ -33,7 +33,7 @@ func LoggingMiddleware() gin.HandlerFunc {
 		if latency > time.Second*3 {
 			logger = logger.With("latency", latencyValue)
 		}
-		logger.Infof("[DISK_API] %v | %3d | %s | %13v | %15s | %-7s %#v",
+		logger.Infof("[SHORT_API] %v | %3d | %s | %13v | %15s | %-7s %#v",
 			timestamp.Format("2006/01/02 - 15:04:05"),
 			status,
 			latency,
