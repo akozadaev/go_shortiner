@@ -3,7 +3,6 @@ package shorten
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go_shurtiner/internal/http/handler"
 	"go_shurtiner/internal/http/helper"
@@ -16,15 +15,15 @@ import (
 )
 
 type Handler struct {
-	hortenRepository shortenRepository.ShortenRepository
-	cfg              *config.Config
+	shortenRepository shortenRepository.ShortenRepository
+	cfg               *config.Config
 }
 
 func NewHandler(hortenRepository shortenRepository.ShortenRepository,
 	cfg *config.Config) *Handler {
 	return &Handler{
-		hortenRepository: hortenRepository,
-		cfg:              cfg,
+		shortenRepository: hortenRepository,
+		cfg:               cfg,
 	}
 }
 
@@ -44,7 +43,6 @@ func (h *Handler) createLink(c *gin.Context) {
 	handler.HandleRequest(c, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
 		logger.Debugw("creating link", "create")
-		//ctx := c.Request.Context()
 
 		links := make([]model.CreateLink, 0)
 		body, err := io.ReadAll(c.Request.Body)
@@ -69,10 +67,22 @@ func (h *Handler) createLink(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 			return handler.NewInternalErrorResponse(err)
 		}
-		fmt.Println(links)
+
+		linkResponse := NewLinkResponse(links, h.cfg.ServerConfig.Host)
+		for _, datum := range linkResponse.Data {
+			link := model.Link{
+				Source:    datum.Source,
+				Shortened: datum.Shortened,
+			}
+			err = h.shortenRepository.SaveLink(c.Request.Context(), &link)
+			if err != nil {
+				return handler.NewInternalErrorResponse(err)
+			}
+		}
+
 		return handler.NewSuccessResponse(
 			http.StatusOK,
-			NewLinkResponse(links, h.cfg.ServerConfig.Host),
+			linkResponse,
 		)
 	})
 }

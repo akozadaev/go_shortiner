@@ -3,7 +3,7 @@ server:
   readTimeout: 15s
   writeTimeout: 15m
   gracefulShutdown: 30s
-  host: "https://short.ru"
+  host: "https://short.ru/"
 db:
   dataSourceName: "host=localhost user=short password=short dbname=short port=5432 sslmode=disable TimeZone=Europe/Moscow"
   logLevel: 2
