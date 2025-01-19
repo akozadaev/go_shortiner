@@ -1,9 +1,9 @@
 package shorten
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"go_shurtiner/internal/shorten/model"
+	"go_shurtiner/pkg/mediator"
+	"math/rand"
 )
 
 type Link struct {
@@ -19,8 +19,15 @@ func NewLinkResponse(sourcesLinks []model.CreateLink, host string) *LinkResponse
 	var hashStr string
 	links := make([]Link, 0)
 	for _, sl := range sourcesLinks {
-
-		hashStr = GetMD5Hash(sl.Source)
+		rnd := rand.Intn(2)
+		switch rnd {
+		case 0:
+			md5 := new(mediator.Md5)
+			hashStr = md5.Generate(sl.Source)
+		case 1:
+			base62 := new(mediator.Base62)
+			hashStr = base62.Generate(sl.Source)
+		}
 		link := Link{
 			Source:    sl.Source,
 			Shortened: hashStr,
@@ -31,9 +38,4 @@ func NewLinkResponse(sourcesLinks []model.CreateLink, host string) *LinkResponse
 	return &LinkResponse{
 		Data: links,
 	}
-}
-
-func GetMD5Hash(text string) string {
-	hash := md5.Sum([]byte(text))
-	return hex.EncodeToString(hash[:])
 }
