@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"go_shurtiner/internal/http/handler"
 	"go_shurtiner/internal/http/helper"
 	shortenRepository "go_shurtiner/internal/shorten/datebase"
 	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
+	trace "go_shurtiner/pkg/trace"
 	"io"
 	"net/http"
 )
@@ -96,6 +98,12 @@ func (h *Handler) createLink(c *gin.Context) {
 
 func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine) {
 	v1 := r.Group("v1")
+
+	client, err := trace.NewTraceClient()
+	if err != nil {
+		log.Error().Stack().Err(err)
+	}
+	v1.Use(client.MiddleWareTrace())
 
 	{
 		v1.GET("/short/:link", h.getLink)

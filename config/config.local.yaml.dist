@@ -25,3 +25,8 @@ logging:
   error_max_backups: 30
   error_max_age: 90
   error_compress: true
+trace:
+  is_enabled: true
+  trace_url: "http://localhost:14268/api/traces"
+  trace_service_name: "URL-SHORTINER"
+  trace_is_http_body_enabled: true

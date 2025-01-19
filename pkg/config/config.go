@@ -14,6 +14,7 @@ type Config struct {
 	ServerConfig  ServerConfig  `json:"server" yaml:"server"`
 	DBConfig      DBConfig      `json:"db"`
 	LoggingConfig LoggingConfig `json:"logging" yaml:"logging"`
+	TraceConfig   TraceConfig   `json:"trace" yaml:"trace"`
 }
 
 type LoggingConfig struct {
@@ -48,6 +49,13 @@ type DBConfig struct {
 		MaxIdle     int           `json:"maxIdle"`
 		MaxLifetime time.Duration `json:"maxLifetime"`
 	} `json:"pool"`
+}
+
+type TraceConfig struct {
+	IsTraceEnabled    bool   `json:"is_enabled"`
+	Url               string `json:"trace_url"`
+	ServiceName       string `json:"trace_service_name"`
+	IsHttpBodyEnabled bool   `json:"trace_is_http_body_enabled"`
 }
 
 func Load() (*Config, error) {
