@@ -17,3 +17,44 @@ Zap, Jaeger
 ## Показывает работу с паттерном проектирования  Medaitor
 
 Метод с общим названием Generate
+
+## Для запуска
+
+скачать репозиторий, создать пeстую базу Postgres ```link```, выполнить в консоли ```make build```, запустить собранное приложение.
+
+### Роуты:
+1. 
+[POST] /v1/short
+
+с телом объект или массив объектов вида:
+```JSON
+[
+  {
+    "url": "http://longlonglonglonglonglonglonglongurl.url"
+  },
+  {
+    "url": "http://longlonglonglonglonglonglonglonglonglonglonglonglongurl.url"
+  }
+]
+```
+или
+```JSON
+{
+  "url": "http://longlonglonglonglonglonglonglonglonglonglonglonglongurl.url"
+}
+```
+
+2. 
+[GET] /v1/short/:shortened
+
+ответ вида:
+```JSON
+{
+    "ID": 4,
+    "CreatedAt": "2025-01-20T00:34:48.852775+03:00",
+    "UpdatedAt": "2025-01-20T00:34:48.852775+03:00",
+    "DeletedAt": null,
+    "source": "http://urlEEEEEEEEee.url",
+    "shortened": "https://short.ru/4339487037079594733"
+}
+```
