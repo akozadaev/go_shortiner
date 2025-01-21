@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go_shurtiner/internal/database/database"
+	"go_shurtiner/internal/database"
 	"go_shurtiner/internal/http/middleware"
 	"go_shurtiner/internal/shorten"
 	shortenRepository "go_shurtiner/internal/shorten/datebase"

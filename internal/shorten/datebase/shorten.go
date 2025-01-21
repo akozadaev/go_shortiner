@@ -2,7 +2,7 @@ package datebase
 
 import (
 	"context"
-	"go_shurtiner/internal/database/database"
+	database2 "go_shurtiner/internal/database"
 	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/logging"
 	"gorm.io/gorm"
@@ -23,12 +23,12 @@ type shortenRepository struct {
 
 func (s shortenRepository) SaveLink(ctx context.Context, links *model.Link) error {
 	logger := logging.FromContext(ctx)
-	db := database.FromContext(ctx, s.db)
+	db := database2.FromContext(ctx, s.db)
 
 	if err := db.WithContext(ctx).Create(links).Error; err != nil {
 		logger.Errorw("failed to save link", "err", err)
-		if database.IsKeyConflictErr(err) {
-			return database.ErrKeyConflict
+		if database2.IsKeyConflictErr(err) {
+			return database2.ErrKeyConflict
 		}
 		return err
 	}
@@ -37,7 +37,7 @@ func (s shortenRepository) SaveLink(ctx context.Context, links *model.Link) erro
 
 func (s shortenRepository) FindLink(ctx context.Context, shortened string) (model.Link, error) {
 	logger := logging.FromContext(ctx)
-	db := database.FromContext(ctx, s.db)
+	db := database2.FromContext(ctx, s.db)
 	var err error
 	var links model.Link
 	if err = db.WithContext(ctx).First(&links, "shortened = ?", shortened).Error; err != nil {
