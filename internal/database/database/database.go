@@ -21,8 +21,6 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 
 	for i := 0; i <= 50; i++ {
 		db, err = gorm.Open(postgres.Open(cfg.DBConfig.DataSourceName), &gorm.Config{Logger: logger, TranslateError: true})
-		// Migrate the schema
-		db.AutoMigrate(&model.Link{})
 		if err == nil {
 			break
 		}
@@ -32,6 +30,9 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Migrate the schema
+	db.AutoMigrate(&model.Link{})
 
 	rawDB, err := db.DB()
 	if err != nil {

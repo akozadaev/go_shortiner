@@ -4,7 +4,10 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
+
+const goroutineTimeout = 5 * time.Second
 
 func HandleRequest(c *gin.Context, f func(c *gin.Context) *Response) {
 	ctx := c.Request.Context()
@@ -12,17 +15,29 @@ func HandleRequest(c *gin.Context, f func(c *gin.Context) *Response) {
 		handleRequestReal(c, f(c))
 		return
 	}
-	doneChan := make(chan *Response)
-	defer close(doneChan)
+
+	doneChan := make(chan *Response, 1)
 
 	go func() {
-		doneChan <- f(c)
+		defer close(doneChan)
+		select {
+		case <-ctx.Done():
+			return
+		case doneChan <- f(c):
+		}
 	}()
+
 	select {
 	case <-ctx.Done():
-		break
+		c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Request timed out"})
 	case res := <-doneChan:
-		handleRequestReal(c, res)
+		if res != nil {
+			handleRequestReal(c, res)
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		}
+	case <-time.After(goroutineTimeout):
+		c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Request processing timeout"})
 	}
 }
 
@@ -33,9 +48,9 @@ func handleRequestReal(c *gin.Context, res *Response) {
 			statusCode = http.StatusOK
 		}
 		if res.Data != nil {
-			c.JSON(res.StatusCode, res.Data)
+			c.JSON(statusCode, res.Data)
 		} else {
-			c.Status(res.StatusCode)
+			c.Status(statusCode)
 		}
 		return
 	}
