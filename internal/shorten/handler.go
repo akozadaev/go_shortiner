@@ -30,7 +30,7 @@ func NewHandler(hortenRepository shortenRepository.ShortenRepository,
 }
 
 func (h *Handler) getLink(c *gin.Context) {
-	handler.HandleRequest(c, func(c *gin.Context) *handler.Response {
+	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
 		logger.Debugw("getting link", "get")
 		linkStr := c.Param("link")
@@ -49,7 +49,7 @@ func (h *Handler) getLink(c *gin.Context) {
 }
 
 func (h *Handler) createLink(c *gin.Context) {
-	handler.HandleRequest(c, func(c *gin.Context) *handler.Response {
+	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
 		logger.Debugw("creating link", "create")
 

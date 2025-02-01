@@ -7,9 +7,7 @@ import (
 	"time"
 )
 
-const goroutineTimeout = 5 * time.Second
-
-func HandleRequest(c *gin.Context, f func(c *gin.Context) *Response) {
+func HandleRequest(c *gin.Context, goroutineTimeout time.Duration, f func(c *gin.Context) *Response) {
 	ctx := c.Request.Context()
 	if _, ok := ctx.Deadline(); !ok {
 		handleRequestReal(c, f(c))

@@ -4,6 +4,7 @@ server:
   writeTimeout: 15m
   gracefulShutdown: 30s
   host: "https://short.ru/"
+  goroutineTimeout: "5s" #время жизни go-routine для устранения зависания рутин при множественных запросах
 db:
   dataSourceName: "host=localhost user=short password=short dbname=short port=5432 sslmode=disable TimeZone=Europe/Moscow"
   logLevel: 2
@@ -15,16 +16,18 @@ logging:
   level: -1
   encoding: console
   development: true
-  info_filename: "logs/application.log"
-  info_max_size: 100
-  info_max_backups: 30
-  info_max_age: 90
-  info_compress: true
-  error_filename: "logs/application_error.log"
-  error_max_size: 100
-  error_max_backups: 30
-  error_max_age: 90
-  error_compress:
+  infoLevel:
+    filename: "logs/application.log"
+    maxSize: 100
+    maxBackups: 30
+    maxAge: 90
+    compress: true
+  errorLevel:
+    filename: "logs/application_error.log"
+    maxSize: 100
+    maxBackups: 30
+    maxAge: 90
+    compress: true
 trace:
   is_enabled: true
   trace_url: "http://localhost:14268/api/traces"

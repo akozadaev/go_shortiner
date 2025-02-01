@@ -18,19 +18,27 @@ type Config struct {
 }
 
 type LoggingConfig struct {
-	Level           int    `json:"level"`
-	Encoding        string `json:"encoding"`
-	Development     bool   `json:"development"`
-	InfoFilename    string `json:"info_filename"`
-	InfoMaxSize     int    `json:"info_max_size"`
-	InfoMaxBackups  int    `json:"info_max_backups"`
-	InfoMaxAge      int    `json:"info_max_age"`
-	InfoCompress    bool   `json:"info_compress"`
-	ErrorFilename   string `json:"error_filename"`
-	ErrorMaxSize    int    `json:"error_max_size"`
-	ErrorMaxBackups int    `json:"error_max_backups"`
-	ErrorMaxAge     int    `json:"error_max_age"`
-	ErrorCompress   bool   `json:"error_compress"`
+	Level       int                `json:"level"`
+	Encoding    string             `json:"encoding"`
+	Development bool               `json:"development"`
+	Info        InfoLoggingConfig  `json:"infoLevel" yaml:"infoLevel"`
+	Error       ErrorLoggingConfig `json:"errorLevel" yaml:"errorLevel"`
+}
+
+type InfoLoggingConfig struct {
+	Filename   string `json:"filename"`
+	MaxSize    int    `json:"maxSize"`
+	MaxBackups int    `json:"maxBackups"`
+	MaxAge     int    `json:"maxAge"`
+	Compress   bool   `json:"compress"`
+}
+
+type ErrorLoggingConfig struct {
+	Filename   string `json:"filename"`
+	MaxSize    int    `json:"maxSize"`
+	MaxBackups int    `json:"maxBackups"`
+	MaxAge     int    `json:"maxAge"`
+	Compress   bool   `json:"compress"`
 }
 
 type ServerConfig struct {
@@ -38,6 +46,7 @@ type ServerConfig struct {
 	ReadTimeout      time.Duration `json:"readTimeout"`
 	WriteTimeout     time.Duration `json:"writeTimeout"`
 	GracefulShutdown time.Duration `json:"gracefulShutdown"`
+	GoroutineTimeout time.Duration `json:"goroutineTimeout"`
 	Host             string        `json:"host"`
 }
 

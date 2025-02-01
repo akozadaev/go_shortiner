@@ -53,16 +53,16 @@ func runApplication() {
 	logging.SetConfig(&logging.Config{
 		Encoding:        serverConfig.LoggingConfig.Encoding,
 		Level:           loggerLevel,
-		InfoFilename:    serverConfig.LoggingConfig.InfoFilename,
-		InfoMaxSize:     serverConfig.LoggingConfig.InfoMaxSize,
-		InfoMaxBackups:  serverConfig.LoggingConfig.InfoMaxBackups,
-		InfoMaxAge:      serverConfig.LoggingConfig.InfoMaxAge,
-		InfoCompress:    serverConfig.LoggingConfig.InfoCompress,
-		ErrorFilename:   serverConfig.LoggingConfig.ErrorFilename,
-		ErrorMaxSize:    serverConfig.LoggingConfig.ErrorMaxSize,
-		ErrorMaxBackups: serverConfig.LoggingConfig.ErrorMaxBackups,
-		ErrorMaxAge:     serverConfig.LoggingConfig.ErrorMaxAge,
-		ErrorCompress:   serverConfig.LoggingConfig.ErrorCompress,
+		InfoFilename:    serverConfig.LoggingConfig.Info.Filename,
+		InfoMaxSize:     serverConfig.LoggingConfig.Info.MaxSize,
+		InfoMaxBackups:  serverConfig.LoggingConfig.Info.MaxBackups,
+		InfoMaxAge:      serverConfig.LoggingConfig.Info.MaxAge,
+		InfoCompress:    serverConfig.LoggingConfig.Info.Compress,
+		ErrorFilename:   serverConfig.LoggingConfig.Error.Filename,
+		ErrorMaxSize:    serverConfig.LoggingConfig.Error.MaxSize,
+		ErrorMaxBackups: serverConfig.LoggingConfig.Error.MaxBackups,
+		ErrorMaxAge:     serverConfig.LoggingConfig.Error.MaxAge,
+		ErrorCompress:   serverConfig.LoggingConfig.Error.Compress,
 	})
 	defer logging.DefaultLogger().Sync()
 
