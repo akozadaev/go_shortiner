@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"runtime"
 	"time"
 )
 
@@ -14,7 +15,7 @@ func HandleRequest(c *gin.Context, goroutineTimeout time.Duration, f func(c *gin
 		return
 	}
 
-	doneChan := make(chan *Response, 1)
+	doneChan := make(chan *Response, runtime.NumCPU())
 
 	go func() {
 		defer close(doneChan)

@@ -1,7 +1,7 @@
-package shorten
+package app
 
 import (
-	"go_shurtiner/internal/shorten/model"
+	"go_shurtiner/internal/app/model"
 	"go_shurtiner/pkg/mediator"
 	"math/rand"
 )

@@ -1,9 +1,9 @@
-package datebase
+package repository
 
 import (
 	"context"
+	"go_shurtiner/internal/app/model"
 	database2 "go_shurtiner/internal/database"
-	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/logging"
 	"gorm.io/gorm"
 )
@@ -43,6 +43,6 @@ func (s shortenRepository) FindLink(ctx context.Context, shortened string) (mode
 	if err = db.WithContext(ctx).First(&links, "shortened = ?", shortened).Error; err != nil {
 		logger.Errorw("failed to get link", "err", err)
 	}
-	links.Shortened = links.Shortened
+
 	return links, err
 }

@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"go_shurtiner/internal/app"
+	"go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/database"
 	"go_shurtiner/internal/http/middleware"
-	"go_shurtiner/internal/shorten"
-	shortenRepository "go_shurtiner/internal/shorten/datebase"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"net/http"
@@ -64,9 +64,12 @@ func runApplication() {
 		ErrorMaxAge:     serverConfig.LoggingConfig.Error.MaxAge,
 		ErrorCompress:   serverConfig.LoggingConfig.Error.Compress,
 	})
-	defer logging.DefaultLogger().Sync()
 
-	app := fx.New(
+	defer func() {
+		_ = logging.DefaultLogger().Sync()
+	}()
+
+	application := fx.New(
 		fx.Supply(serverConfig),
 		fx.Supply(logging.DefaultLogger().Desugar()),
 		fx.WithLogger(func(log *zap.Logger) fxevent.Logger {
@@ -78,15 +81,16 @@ func runApplication() {
 			database.NewDatabase,
 			// server
 			newServer,
-			shortenRepository.NewShortenRepository,
-			shorten.NewHandler,
+			repository.NewShortenRepository,
+			repository.NewUserRepository,
+			app.NewHandler,
 		),
 		fx.Invoke(
-			shorten.RouteV1,
+			app.RouteV1,
 			func(r *gin.Engine) {},
 		),
 	)
-	app.Run()
+	application.Run()
 }
 
 func newServer(lc fx.Lifecycle, cfg *config.Config) *gin.Engine {
@@ -96,6 +100,7 @@ func newServer(lc fx.Lifecycle, cfg *config.Config) *gin.Engine {
 	r.Use(middleware.CorsMiddleware())
 	r.Use(middleware.TimeoutMiddleware(cfg.ServerConfig.WriteTimeout))
 	r.Use(middleware.LoggingMiddleware())
+	r.Use(middleware.RestfulParamsMiddleware())
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.ServerConfig.Port),

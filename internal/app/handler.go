@@ -1,14 +1,14 @@
-package shorten
+package app
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"go_shurtiner/internal/app/model"
+	repository "go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/http/handler"
 	"go_shurtiner/internal/http/helper"
-	shortenRepository "go_shurtiner/internal/shorten/datebase"
-	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	trace "go_shurtiner/pkg/trace"
@@ -17,14 +17,17 @@ import (
 )
 
 type Handler struct {
-	shortenRepository shortenRepository.ShortenRepository
+	shortenRepository repository.ShortenRepository
+	userRepository    repository.UserRepository
 	cfg               *config.Config
 }
 
-func NewHandler(hortenRepository shortenRepository.ShortenRepository,
+func NewHandler(hortenRepository repository.ShortenRepository,
+	userRepository repository.UserRepository,
 	cfg *config.Config) *Handler {
 	return &Handler{
 		shortenRepository: hortenRepository,
+		userRepository:    userRepository,
 		cfg:               cfg,
 	}
 }
@@ -41,6 +44,23 @@ func (h *Handler) getLink(c *gin.Context) {
 		}
 
 		res.Shortened = fmt.Sprintf("%s%s", h.cfg.ServerConfig.Host, res.Shortened)
+		return handler.NewSuccessResponse(
+			http.StatusOK,
+			res,
+		)
+	})
+}
+
+func (h *Handler) getUsers(c *gin.Context) {
+	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
+		logger := logging.FromContext(c)
+		logger.Debugw("getting users", "getUsers")
+
+		res, err := h.userRepository.FetchUsers(c.Request.Context())
+		if err != nil {
+			return handler.NewInternalErrorResponse(err)
+		}
+
 		return handler.NewSuccessResponse(
 			http.StatusOK,
 			res,
@@ -108,6 +128,9 @@ func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine) {
 	{
 		v1.GET("/short/:link", h.getLink)
 		v1.POST("/short", h.createLink)
+		v1.GET("/user/:id", h.getLink)
+		v1.GET("/users", h.getUsers)
+		//v1.POST("/short", h.createLink)
 	}
 
 }

@@ -1,9 +1,9 @@
 package database
 
 import (
-	"go_shurtiner/internal/shorten/model"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
+	"gorm.io/gorm/schema"
 	"time"
 
 	"go.uber.org/zap/zapcore"
@@ -20,7 +20,14 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	)
 
 	for i := 0; i <= 50; i++ {
-		db, err = gorm.Open(postgres.Open(cfg.DBConfig.DataSourceName), &gorm.Config{Logger: logger, TranslateError: true})
+		db, err = gorm.Open(postgres.Open(cfg.DBConfig.DataSourceName),
+			&gorm.Config{
+				Logger:         logger,
+				TranslateError: true,
+				NamingStrategy: schema.NamingStrategy{
+					TablePrefix:   "public.",
+					SingularTable: false,
+				}})
 		if err == nil {
 			break
 		}
@@ -32,7 +39,10 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&model.Link{})
+	err = Migrate(db)
+	if err != nil {
+		return nil, err
+	}
 
 	rawDB, err := db.DB()
 	if err != nil {
