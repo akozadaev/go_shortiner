@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"go_shurtiner/internal/app"
+	"go_shurtiner/internal/app/authentication"
 	"go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/database"
 	"go_shurtiner/internal/http/middleware"
@@ -84,6 +85,7 @@ func runApplication() {
 			repository.NewShortenRepository,
 			repository.NewUserRepository,
 			app.NewHandler,
+			authentication.NewBasicAuth,
 		),
 		fx.Invoke(
 			app.RouteV1,

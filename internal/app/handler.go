@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"go_shurtiner/internal/app/authentication"
 	"go_shurtiner/internal/app/model"
 	repository "go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/http/handler"
 	"go_shurtiner/internal/http/helper"
+	"go_shurtiner/internal/http/middleware"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	trace "go_shurtiner/pkg/trace"
@@ -22,7 +24,8 @@ type Handler struct {
 	cfg               *config.Config
 }
 
-func NewHandler(hortenRepository repository.ShortenRepository,
+func NewHandler(
+	hortenRepository repository.ShortenRepository,
 	userRepository repository.UserRepository,
 	cfg *config.Config) *Handler {
 	return &Handler{
@@ -37,7 +40,6 @@ func (h *Handler) getLink(c *gin.Context) {
 		logger := logging.FromContext(c)
 		logger.Debugw("getting link", "get")
 		linkStr := c.Param("link")
-		fmt.Println(linkStr)
 		res, err := h.shortenRepository.FindLink(c.Request.Context(), linkStr)
 		if err != nil {
 			return handler.NewInternalErrorResponse(err)
@@ -51,12 +53,49 @@ func (h *Handler) getLink(c *gin.Context) {
 	})
 }
 
+func (h *Handler) getLinks(c *gin.Context) {
+	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
+		logger := logging.FromContext(c)
+		logger.Debugw("getting links", "get")
+		res, err := h.shortenRepository.FetchLinks(c.Request.Context())
+		if err != nil {
+			return handler.NewInternalErrorResponse(err)
+		}
+
+		if err != nil {
+			return handler.NewInternalErrorResponse(err)
+		}
+
+		return handler.NewSuccessResponse(
+			http.StatusOK,
+			res,
+		)
+	})
+}
+
 func (h *Handler) getUsers(c *gin.Context) {
 	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
 		logger.Debugw("getting users", "getUsers")
 
 		res, err := h.userRepository.FetchUsers(c.Request.Context())
+		if err != nil {
+			return handler.NewInternalErrorResponse(err)
+		}
+
+		return handler.NewSuccessResponse(
+			http.StatusOK,
+			res,
+		)
+	})
+}
+
+func (h *Handler) getUser(c *gin.Context) {
+	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
+		logger := logging.FromContext(c)
+		logger.Debugw("getting user by id", "getUser")
+		idStr := c.Param("id")
+		res, err := h.userRepository.GetUserForApiById(c.Request.Context(), idStr)
 		if err != nil {
 			return handler.NewInternalErrorResponse(err)
 		}
@@ -116,20 +155,20 @@ func (h *Handler) createLink(c *gin.Context) {
 	})
 }
 
-func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine) {
+func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine, auth authentication.Authentication) {
 	v1 := r.Group("v1")
 
 	client, err := trace.NewTraceClient()
+	authMiddleware := middleware.AuthenticationMiddleware(auth)
 	if err != nil {
 		log.Error().Stack().Err(err)
 	}
 	v1.Use(client.MiddleWareTrace())
-
 	{
 		v1.GET("/short/:link", h.getLink)
 		v1.POST("/short", h.createLink)
-		v1.GET("/user/:id", h.getLink)
-		v1.GET("/users", h.getUsers)
+		v1.Use(authMiddleware).GET("/user/:id", h.getUser)
+		v1.Use(authMiddleware).GET("/users", h.getUsers)
 		//v1.POST("/short", h.createLink)
 	}
 

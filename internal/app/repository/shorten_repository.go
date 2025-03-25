@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"go_shurtiner/internal/adapter"
 	"go_shurtiner/internal/app/model"
 	database2 "go_shurtiner/internal/database"
 	"go_shurtiner/pkg/logging"
@@ -11,6 +12,7 @@ import (
 type ShortenRepository interface {
 	SaveLink(ctx context.Context, link *model.Link) error
 	FindLink(ctx context.Context, shortened string) (model.Link, error)
+	FetchLinks(ctx context.Context) ([]model.Link, error)
 }
 
 func NewShortenRepository(db *gorm.DB) ShortenRepository {
@@ -42,6 +44,20 @@ func (s shortenRepository) FindLink(ctx context.Context, shortened string) (mode
 	var links model.Link
 	if err = db.WithContext(ctx).First(&links, "shortened = ?", shortened).Error; err != nil {
 		logger.Errorw("failed to get link", "err", err)
+	}
+
+	return links, err
+}
+
+func (s shortenRepository) FetchLinks(ctx context.Context) ([]model.Link, error) {
+	db := database2.FromContext(ctx, s.db)
+	links := make([]model.Link, 0)
+
+	var err error
+	if pagination, ok := ctx.Value(adapter.Pagination).(*adapter.PaginationAdapter); ok {
+		err = db.Find(&links).Limit(int(pagination.GetLimit())).Error
+	} else {
+		err = db.Find(&links).Error
 	}
 
 	return links, err

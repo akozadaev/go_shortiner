@@ -12,8 +12,8 @@ func Migrate(db *gorm.DB) error {
 		logging.DefaultLogger().Errorf("failed to migrate database: %v", err)
 		return err
 	}
-
-	user := &model.User{Name: "Алексей", MiddleName: "Сергеевич", LastName: "Козадаев", Password: "$2a$12$RwH.0DgK2A5aICN8ahK9oOTJmS5rWFDQ45qUx.y4ySEZ8la5Hdypq"}
+	//P@$$w0rd
+	user := &model.User{Name: "Алексей", MiddleName: "Сергеевич", LastName: "Козадаев", Password: "$2a$12$uXR.vgCffldZK3ryULgx6u8ld.sntTBJZgH4KPHt9fWEHU8X38zoW", Email: "akozadaev@inbox.ru"}
 	db.FirstOrCreate(user)
 	return nil
 }

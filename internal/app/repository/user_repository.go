@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"go_shurtiner/internal/adapter"
 	"go_shurtiner/internal/app/model"
 	database2 "go_shurtiner/internal/database"
@@ -12,7 +13,9 @@ import (
 
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *model.User) error
-	GetUser(ctx context.Context, pass string) (model.User, error)
+	GetUserForApi(ctx context.Context, email string) (*model.UserApi, error)
+	GetUserForApiById(ctx context.Context, id string) (*model.UserApi, error)
+	GetUser(ctx context.Context, email string) (*model.User, error)
 	HashPassword(password string) (string, error)
 	FetchUsers(ctx context.Context) ([]model.UserApi, error)
 }
@@ -39,15 +42,51 @@ func (r userRepository) CreateUser(ctx context.Context, user *model.User) error 
 	return nil
 }
 
-func (r userRepository) GetUser(ctx context.Context, pass string) (model.User, error) {
+func (r userRepository) GetUserForApi(ctx context.Context, email string) (*model.UserApi, error) {
 	logger := logging.FromContext(ctx)
 	db := database2.FromContext(ctx, r.db)
 	var err error
 	var user model.User
-	if err = db.WithContext(ctx).First(&user, "password = ?", pass).Error; err != nil {
-		logger.Errorw("failed to get link", "err", err)
+	if err = db.WithContext(ctx).First(&user, "email = ?", email).Error; err != nil {
+		logger.Errorw("failed to get user for API", "err", err)
 	}
-	return user, err
+	result := model.UserApi{
+		user.Model,
+		user.Name,
+		user.LastName,
+		user.MiddleName,
+		user.Email}
+	return &result, err
+}
+
+func (r userRepository) GetUserForApiById(ctx context.Context, id string) (*model.UserApi, error) {
+	logger := logging.FromContext(ctx)
+	db := database2.FromContext(ctx, r.db)
+	var err error
+	var user model.User
+	fmt.Println(id)
+	if err = db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
+		logger.Errorw("failed to get user for API by id", "err", err)
+	}
+	result := model.UserApi{
+		user.Model,
+		user.Name,
+		user.LastName,
+		user.MiddleName,
+		user.Email}
+	return &result, err
+}
+
+func (r userRepository) GetUser(ctx context.Context, email string) (*model.User, error) {
+	logger := logging.FromContext(ctx)
+	db := database2.FromContext(ctx, r.db)
+	var err error
+	var user model.User
+	if err = db.WithContext(ctx).First(&user, "email = ?", email).Error; err != nil {
+		logger.Errorw("failed to get user", "err", err)
+	}
+
+	return &user, err
 }
 
 func (r userRepository) FetchUsers(ctx context.Context) ([]model.UserApi, error) {
