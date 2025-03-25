@@ -94,7 +94,6 @@ func (t *Tracer) InjectHttpTraceId(ctx context.Context, req *http.Request) {
 }
 
 func (t *Tracer) MiddleWareTrace() gin.HandlerFunc {
-
 	return func(c *gin.Context) {
 		if t == nil || !t.cfg.IsTraceEnabled {
 			c.Next()
@@ -120,19 +119,13 @@ func (t *Tracer) MiddleWareTrace() gin.HandlerFunc {
 
 		// парсинг ошибок
 		span.SetAttributes(attribute.Int(AttributeRespHttpCode, c.Writer.Status()))
-		//{
-		//	excep := c.Keys["exception"]
-		//
-		//	switch v := excep.(type) {
-		//	case *exception.AppException:
-		//		span.SetAttributes(attribute.Int(AttributeRespHttpCode, v.Code))
-		//		if v.Error != nil {
-		//			span.SetAttributes(attribute.String(AttributeRespErrMsg, v.Error.Error()))
-		//		}
-		//	default:
-		//		span.SetAttributes(attribute.Int(AttributeRespHttpCode, c.Writer.Status()))
-		//	}
-		//}
+		{
+			excep := c.Keys["exception"]
+
+			if v, ok := excep.(error); ok {
+				span.SetAttributes(attribute.String(AttributeRespErrMsg, v.Error()))
+			}
+		}
 	}
 }
 
