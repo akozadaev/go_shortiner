@@ -250,18 +250,19 @@ func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine, auth authentication.
 }
 
 func RouteV2(cfg *config.Config, h *Handler, r *gin.Engine, auth authentication.Authentication) {
-	v2 := r.Group("v2")
-
-	client, err := trace.NewTraceClient()
 	authMiddleware := middleware.AuthenticationMiddleware(auth)
+	client, err := trace.NewTraceClient()
 	if err != nil {
 		log.Error().Stack().Err(err)
 	}
+	v2 := r.Group("v2")
+	v2.Use(authMiddleware)
 	v2.Use(client.MiddleWareTrace())
+
 	{
-		v2.Use(authMiddleware).POST("/short", h.createLinkByUser)
-		v2.Use(authMiddleware).GET("/user/:id", h.getUser)
-		v2.Use(authMiddleware).GET("/users", h.getUsers)
+		v2.POST("/short", h.createLinkByUser)
+		v2.GET("/user/:id", h.getUser)
+		v2.GET("/users", h.getUsers)
 	}
 
 }
