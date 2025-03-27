@@ -89,6 +89,7 @@ func runApplication() {
 		),
 		fx.Invoke(
 			app.RouteV1,
+			app.RouteV2,
 			func(r *gin.Engine) {},
 		),
 	)

@@ -39,7 +39,8 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	}
 
 	// Migrate the schema
-	err = Migrate(db)
+
+	err = Migrate(db, cfg.DBConfig.DataSourceName)
 	if err != nil {
 		return nil, err
 	}
