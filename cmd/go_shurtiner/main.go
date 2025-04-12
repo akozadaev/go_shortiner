@@ -9,6 +9,8 @@ import (
 	"go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/database"
 	"go_shurtiner/internal/http/middleware"
+	"go_shurtiner/internal/queue"
+	"go_shurtiner/internal/queue/service"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"net/http"
@@ -86,8 +88,21 @@ func runApplication() {
 			repository.NewUserRepository,
 			app.NewHandler,
 			authentication.NewBasicAuth,
+			// task queue
+			repository.NewQueueRepository,
+			service.NewQueueService,
+			fx.Annotate(
+				repository.NewQueueRepository,
+				fx.As(new(service.QueueRepository)), // TODO
+			),
+			fx.Annotate(
+				service.NewQueueService,
+				fx.As(new(queue.QueueService)),
+			),
+			queue.NewQueue,
 		),
 		fx.Invoke(
+			newQueue,
 			app.RouteV1,
 			app.RouteV2,
 			func(r *gin.Engine) {},
@@ -128,4 +143,26 @@ func newServer(lc fx.Lifecycle, cfg *config.Config) *gin.Engine {
 		},
 	})
 	return r
+}
+
+func newQueue(
+	lc fx.Lifecycle, cfg *config.Config, svc *queue.Queue,
+) {
+	svc.AddJob()
+
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			logging.FromContext(ctx).Info("Start task queue")
+			go func() {
+				if err := svc.Run(ctx); err != nil {
+					logging.DefaultLogger().Errorw("failed to run task queue", "err", err)
+				}
+			}()
+			return nil
+		},
+		OnStop: func(ctx context.Context) error {
+			logging.FromContext(ctx).Info("Stopped task queue")
+			return svc.Shutdown()
+		},
+	})
 }

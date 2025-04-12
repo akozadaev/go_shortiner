@@ -7,10 +7,11 @@ import (
 	"go_shurtiner/internal/app/model"
 	"go_shurtiner/pkg/logging"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 func Migrate(db *gorm.DB, dataSourceName string) error {
-	err := db.AutoMigrate(&model.Link{}, &model.User{}, &model.Task{})
+	err := db.AutoMigrate(&model.Link{}, &model.User{}, &model.Task{}, &model.JobQueue{})
 	if err != nil {
 		logging.DefaultLogger().Errorf("failed to auto migrate database: %v", err)
 		return err
@@ -28,6 +29,7 @@ func Migrate(db *gorm.DB, dataSourceName string) error {
 
 func gooseMigrate(dataSourceName string) error {
 	db, err := sql.Open("postgres", dataSourceName)
+	strconv.ParseBool("true")
 	if err != nil {
 		logging.DefaultLogger().Errorf("failed to open DB to goosee migrate: %v", err)
 		return err

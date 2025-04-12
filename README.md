@@ -58,3 +58,9 @@ Zap, Jaeger
     "shortened": "https://short.ru/4339487037079594733"
 }
 ```
+
+Как может выглядеть вставка в таблицу для подготовки отчетов
+```
+INSERT INTO PREPARED_report (id, created_at, updated_at, timestamp, source, shortened, user_email, user_fullname)  
+VALUES (1, '2025-03-15T12:00:00Z', now(), '2025-03-15T12:00:00Z', 'https://example.com', 'exmpl', 'user@example.com', 'John Doe');
+```
