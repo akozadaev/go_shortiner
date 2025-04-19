@@ -9,8 +9,10 @@ import (
 	"go_shurtiner/internal/app/repository"
 	"go_shurtiner/internal/database"
 	"go_shurtiner/internal/http/middleware"
+	"go_shurtiner/internal/job"
 	"go_shurtiner/internal/queue"
 	"go_shurtiner/internal/queue/service"
+	queueSvc "go_shurtiner/internal/queue/service"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"net/http"
@@ -100,6 +102,8 @@ func runApplication() {
 				fx.As(new(queue.QueueService)),
 			),
 			queue.NewQueue,
+			//reports
+			repository.NewPrepareReportRepository,
 		),
 		fx.Invoke(
 			newQueue,
@@ -147,8 +151,13 @@ func newServer(lc fx.Lifecycle, cfg *config.Config) *gin.Engine {
 
 func newQueue(
 	lc fx.Lifecycle, cfg *config.Config, svc *queue.Queue,
+	queueSvc *queueSvc.QueueService,
+	repository repository.PrepareReportRepository,
 ) {
-	svc.AddJob()
+	svc.AddJob(
+		job.NewPrepareDataJob(context.TODO(), repository, queueSvc, cfg.PrepareDataConfig),
+		//job.NewCreateReportJob(context.TODO(), repository, queueSvc, cfg.PrepareDataConfig),
+	)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

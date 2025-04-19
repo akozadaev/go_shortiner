@@ -33,3 +33,5 @@ trace:
   trace_url: "http://localhost:14268/api/traces"
   trace_service_name: "URL-SHORTINER"
   trace_is_http_body_enabled: true
+prepare_data:
+  time_range: "20m"

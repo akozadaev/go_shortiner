@@ -25,11 +25,11 @@ type Handler struct {
 }
 
 func NewHandler(
-	hortenRepository repository.ShortenRepository,
+	shortenRepository repository.ShortenRepository,
 	userRepository repository.UserRepository,
 	cfg *config.Config) *Handler {
 	return &Handler{
-		shortenRepository: hortenRepository,
+		shortenRepository: shortenRepository,
 		userRepository:    userRepository,
 		cfg:               cfg,
 	}

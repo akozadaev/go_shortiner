@@ -7,11 +7,12 @@ import (
 
 type User struct {
 	gorm.Model
-	Name       string `gorm:"column:name;type:varchar(128);not null;" json:"name"`
-	LastName   string `gorm:"column:lastname;type:varchar(128);not null;" json:"lastname"`
-	MiddleName string `gorm:"column:middlename;type:varchar(128);default null;" json:"middlename"`
-	Password   string `gorm:"column:password;type:varchar(72);not null;" json:"password"`
-	Email      string `gorm:"column:email;type:varchar(72);not null;unique;" json:"email"`
+	Name       string  `gorm:"column:name;type:varchar(128);not null;" json:"name"`
+	LastName   string  `gorm:"column:lastname;type:varchar(128);not null;" json:"lastname"`
+	MiddleName string  `gorm:"column:middlename;type:varchar(128);default null;" json:"middlename"`
+	Password   string  `gorm:"column:password;type:varchar(72);not null;" json:"password"`
+	Email      string  `gorm:"column:email;type:varchar(72);not null;unique;" json:"email"`
+	Links      []*Link `gorm:"many2many:user_link;"`
 }
 
 type UserApi struct {

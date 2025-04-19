@@ -11,10 +11,11 @@ import (
 )
 
 type Config struct {
-	ServerConfig  ServerConfig  `json:"server" yaml:"server"`
-	DBConfig      DBConfig      `json:"db"`
-	LoggingConfig LoggingConfig `json:"logging" yaml:"logging"`
-	TraceConfig   TraceConfig   `json:"trace" yaml:"trace"`
+	ServerConfig      ServerConfig      `json:"server" yaml:"server"`
+	DBConfig          DBConfig          `json:"db"`
+	LoggingConfig     LoggingConfig     `json:"logging" yaml:"logging"`
+	TraceConfig       TraceConfig       `json:"trace" yaml:"trace"`
+	PrepareDataConfig PrepareDataConfig `json:"prepare_data" yaml:"prepare_data"`
 }
 
 type LoggingConfig struct {
@@ -65,6 +66,9 @@ type TraceConfig struct {
 	Url               string `json:"trace_url"`
 	ServiceName       string `json:"trace_service_name"`
 	IsHttpBodyEnabled bool   `json:"trace_is_http_body_enabled"`
+}
+type PrepareDataConfig struct {
+	TimeRange time.Duration `json:"time_range"`
 }
 
 func Load() (*Config, error) {

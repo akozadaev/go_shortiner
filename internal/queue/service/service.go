@@ -12,7 +12,7 @@ import (
 type QueueRepository interface {
 	GetQueue(ctx context.Context) (model.JobQueue, error)
 	GetJob(ctx context.Context, id string) (model.JobQueue, error)
-	CreateJob(ctx context.Context, job model.JobQueue) error
+	CreateJob(ctx context.Context, job *model.JobQueue) error
 	CompleteJob(ctx context.Context, job model.JobQueue) (model.JobQueue, error)
 }
 
@@ -42,11 +42,13 @@ func (s *QueueService) NextJob(name string, startAfter time.Duration, payload an
 	}
 
 	queueJob := model.JobQueue{
-		Name:   name,
-		Params: params,
+		Name:               name,
+		Params:             params,
+		ScheduledStartedAt: time.Now().Unix(),
+		LaunchedAt:         null.IntFrom(time.Now().Add(startAfter).Unix()),
 	}
 
-	err = s.repository.CreateJob(context.Background(), queueJob)
+	err = s.repository.CreateJob(context.Background(), &queueJob)
 	if err != nil {
 		return err
 	}
@@ -57,7 +59,7 @@ func (s *QueueService) NextJob(name string, startAfter time.Duration, payload an
 func (s *QueueService) CreateJob(ctx context.Context, name string, startAfter time.Duration, payload any) (model.JobQueue, error) {
 	queueJob := model.JobQueue{
 		Name:               name,
-		ScheduledStartedAt: null.IntFrom(time.Now().Add(startAfter).Unix()),
+		ScheduledStartedAt: time.Now().Add(startAfter).Unix(),
 	}
 
 	params, err := json.Marshal(payload)
@@ -67,7 +69,7 @@ func (s *QueueService) CreateJob(ctx context.Context, name string, startAfter ti
 
 	queueJob.Params = params
 
-	err = s.repository.CreateJob(ctx, queueJob)
+	err = s.repository.CreateJob(ctx, &queueJob)
 	if err != nil {
 		return queueJob, err
 	}

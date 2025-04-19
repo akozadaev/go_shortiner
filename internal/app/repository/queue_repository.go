@@ -25,15 +25,15 @@ func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) 
 
 	sql := `
 	UPDATE job_queue
-	SET processed_at = @now
+	SET launched_at = @now
 	WHERE id IN (
 		SELECT id
 		FROM job_queue
 		WHERE
 			(
-				processed_at IS NULL
+				launched_at IS NULL
 				OR
-				processed_at < @timeout
+				launched_at < @timeout
 			)
 			AND 
 				completed_at IS NULL
@@ -43,12 +43,13 @@ func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) 
 				OR
 				scheduled_started_at < @now
 			)
+		    AND deleted_at IS NULL
 		ORDER BY 
 			created_at ASC
 		FOR UPDATE SKIP LOCKED
 		LIMIT 1
 	  )
-	  RETURNING id, name, params, scheduled_started_at, processed_at, completed_at, created_at
+	  RETURNING id, name, params, scheduled_started_at, launched_at, completed_at, created_at
 	`
 
 	params := map[string]any{
@@ -75,7 +76,7 @@ func (r *queueRepository) CompleteJob(ctx context.Context, job model.JobQueue) (
 	return job, nil
 }
 
-func (r *queueRepository) CreateJob(ctx context.Context, job model.JobQueue) error {
+func (r *queueRepository) CreateJob(ctx context.Context, job *model.JobQueue) error {
 	db := database.FromContext(ctx, r.db)
 
 	if err := db.WithContext(ctx).Create(job).Error; err != nil {
