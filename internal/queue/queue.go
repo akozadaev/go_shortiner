@@ -79,15 +79,11 @@ func (q *Queue) worker(errCh chan<- error, wg *sync.WaitGroup) {
 			stop = true
 		default:
 			task, err := q.queueService.GetQueue(q.ctx)
-			if task.ID == 0 {
-				break
-			}
-
 			if err != nil {
 				errCh <- fmt.Errorf("cannot load job queue: %v", err)
 				break
 			}
-
+			fmt.Println("task.Name: " + task.Name)
 			if err = q.processTask(&task); err != nil {
 				errCh <- fmt.Errorf("cannot process task: %v", err)
 			}
@@ -106,7 +102,7 @@ func (q *Queue) processTask(task *model.JobQueue) error {
 	log.Printf("[INFO] Start job %s...\n", task.ID)
 
 	if err := job.Process(*task); err != nil {
-		return fmt.Errorf("cannot process job %s: %v", task.ID, err)
+		return fmt.Errorf("cannot process job %v: %v", task.ID, err)
 	}
 
 	_, err = q.queueService.CompleteJob(q.ctx, *task)
@@ -114,14 +110,14 @@ func (q *Queue) processTask(task *model.JobQueue) error {
 		return fmt.Errorf("cannot complete job %s: %v", task.ID, err)
 	}
 
-	log.Printf("[INFO] Finished job %s\n", task.ID)
+	log.Printf("[INFO] Finished job %v\n", task.ID)
 	return nil
 }
 
-func (q *Queue) AddJob(jobs ...QueueJob) {
+func (q *Queue) AddJob(jobName string, jobs ...QueueJob) {
 	q.mu.Lock()
 	for _, job := range jobs {
-		q.jobs[job.Name()] = job
+		q.jobs[jobName] = job
 	}
 	q.mu.Unlock()
 }

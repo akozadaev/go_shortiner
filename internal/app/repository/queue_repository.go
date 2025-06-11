@@ -5,31 +5,29 @@ import (
 	"go_shurtiner/internal/app/model"
 	"go_shurtiner/internal/database"
 	_ "go_shurtiner/internal/queue"
+	"go_shurtiner/pkg/config"
 	"time"
 
 	"gorm.io/gorm"
 )
-
-const JobTimeout = time.Minute * 5
 
 func NewQueueRepository(db *gorm.DB) *queueRepository {
 	return &queueRepository{db: db}
 }
 
 type queueRepository struct {
-	db *gorm.DB
+	db  *gorm.DB
+	cfg config.PrepareDataConfig
 }
 
 func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) {
 	db := database.FromContext(ctx, a.db)
-
+	//CTE для того, чтобы не использовать UPDATE напрямую
 	sql := `
-	UPDATE job_queue
-	SET launched_at = @now
-	WHERE id IN (
-		SELECT id
-		FROM job_queue
-		WHERE
+WITH cte_next_job AS
+	(SELECT id
+	FROM job_queue
+	WHERE
 			(
 				launched_at IS NULL
 				OR
@@ -49,18 +47,22 @@ func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) 
 		FOR UPDATE SKIP LOCKED
 		LIMIT 1
 	  )
-	  RETURNING id, name, params, scheduled_started_at, launched_at, completed_at, created_at
-	`
+	  UPDATE job_queue jq
+	  SET launched_at = @now
+	  FROM cte_next_job
+	  WHERE cte_next_job.id = jq.id
+	  RETURNING jq.id, name, params, scheduled_started_at, launched_at, completed_at, created_at
+`
 
 	params := map[string]any{
 		"now":     time.Now().Unix(),
-		"timeout": time.Now().Add(-JobTimeout).Unix(),
+		"timeout": time.Now().Add(a.cfg.TimeRange).Unix(),
 	}
 
 	var item model.JobQueue
 	tx := db.WithContext(ctx).Raw(sql, params).Scan(&item)
-	if tx.Error == gorm.ErrRecordNotFound {
-		return item, nil
+	if item.ID == 0 {
+		return item, nil // не будем отдавать ошибку, если ничего не получили
 	}
 
 	return item, tx.Error
@@ -68,8 +70,7 @@ func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) 
 
 func (r *queueRepository) CompleteJob(ctx context.Context, job model.JobQueue) (model.JobQueue, error) {
 	db := database.FromContext(ctx, r.db)
-
-	if err := db.WithContext(ctx).Model(&job).Update("completed_at", job.CompletedAt).Error; err != nil {
+	if err := db.WithContext(ctx).Model(&job).Updates(map[string]interface{}{"completed_at": job.CompletedAt, "output": job.Output}).Error; err != nil {
 		return job, err
 	}
 

@@ -3,7 +3,6 @@ package authentication
 import (
 	"encoding/base64"
 	"errors"
-	"fmt"
 	user_model "go_shurtiner/internal/app/model"
 	repository "go_shurtiner/internal/app/repository"
 	"golang.org/x/crypto/bcrypt"
@@ -41,8 +40,6 @@ func (b *BasicAuth) Authenticate(r *http.Request) (*user_model.User, error) {
 	}
 
 	header := r.Header.Get("Authorization")
-	fmt.Println("header: ")
-	fmt.Println(header)
 	token, err := b.createTokenFromHeader(header)
 	if err != nil {
 		return nil, err

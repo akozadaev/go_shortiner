@@ -13,10 +13,10 @@ type PrepareData interface {
 type prepareData struct {
 	payload *any
 	//db      *gorm.DB
-	prepareRepository repository.PrepareReportRepository
+	prepareRepository repository.ReportRepository
 }
 
-func NewPrepareData(payload *any, prepareRepository repository.PrepareReportRepository) PrepareData {
+func NewPrepareData(payload *any, prepareRepository repository.ReportRepository) PrepareData {
 	return &prepareData{
 		payload: payload,
 		//db:      db1,

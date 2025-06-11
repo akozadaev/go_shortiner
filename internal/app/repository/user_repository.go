@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"go_shurtiner/internal/adapter"
 	"go_shurtiner/internal/app/model"
 	database2 "go_shurtiner/internal/database"
@@ -64,7 +63,6 @@ func (r userRepository) GetUserForApiById(ctx context.Context, id string) (*mode
 	db := database2.FromContext(ctx, r.db)
 	var err error
 	var user model.User
-	fmt.Println(id)
 	if err = db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
 		logger.Errorw("failed to get user for API by id", "err", err)
 	}

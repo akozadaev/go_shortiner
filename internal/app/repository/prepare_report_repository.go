@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-type PrepareReportRepository interface {
+type ReportRepository interface {
 	PrepareReportData(ctx context.Context) ([]model.Link, error)
 	SaveReportData(ctx context.Context, reportData *model.PreparedReport) error
 	GetReportData(ctx context.Context, startDate time.Time) (*[]model.PreparedReport, error)
 }
 
-func NewPrepareReportRepository(db *gorm.DB) PrepareReportRepository {
+func NewReportRepository(db *gorm.DB) ReportRepository {
 	return &prepareReportRepository{db: db}
 }
 

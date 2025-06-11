@@ -13,10 +13,10 @@ type CreateReport interface {
 type createReport struct {
 	payload *any
 	//db      *gorm.DB
-	prepareRepository repository.PrepareReportRepository
+	prepareRepository repository.ReportRepository
 }
 
-func NewCreateReport(payload *any, prepareRepository repository.PrepareReportRepository) CreateReport {
+func NewCreateReport(payload *any, prepareRepository repository.ReportRepository) CreateReport {
 	return &createReport{
 		payload: payload,
 		//db:      db1,

@@ -11,8 +11,8 @@ import (
 	"go_shurtiner/internal/http/middleware"
 	"go_shurtiner/internal/job"
 	"go_shurtiner/internal/queue"
-	"go_shurtiner/internal/queue/service"
 	queueSvc "go_shurtiner/internal/queue/service"
+	reportSvc "go_shurtiner/internal/report/service"
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	"net/http"
@@ -46,7 +46,6 @@ func main() {
 func runApplication() {
 	serverConfig, err := config.Load()
 	if err != nil {
-		fmt.Println(err)
 		log.Error().Stack().Err(err)
 	}
 
@@ -92,18 +91,24 @@ func runApplication() {
 			authentication.NewBasicAuth,
 			// task queue
 			repository.NewQueueRepository,
-			service.NewQueueService,
+			queueSvc.NewQueueService,
 			fx.Annotate(
 				repository.NewQueueRepository,
-				fx.As(new(service.QueueRepository)), // TODO
+				fx.As(new(queueSvc.QueueRepository)),
+				//fx.As(new(reportSvc.ReportRepository)),
 			),
 			fx.Annotate(
-				service.NewQueueService,
+				queueSvc.NewQueueService,
 				fx.As(new(queue.QueueService)),
 			),
 			queue.NewQueue,
-			//reports
-			repository.NewPrepareReportRepository,
+			// report
+			reportSvc.NewReportService,
+			repository.NewReportRepository, // нужен для newQueue
+			fx.Annotate(
+				repository.NewReportRepository,
+				fx.As(new(reportSvc.ReportRepository)),
+			),
 		),
 		fx.Invoke(
 			newQueue,
@@ -152,11 +157,13 @@ func newServer(lc fx.Lifecycle, cfg *config.Config) *gin.Engine {
 func newQueue(
 	lc fx.Lifecycle, cfg *config.Config, svc *queue.Queue,
 	queueSvc *queueSvc.QueueService,
-	repository repository.PrepareReportRepository,
+	repository repository.ReportRepository,
 ) {
-	svc.AddJob(
-		job.NewPrepareDataJob(context.TODO(), repository, queueSvc, cfg.PrepareDataConfig),
-		//job.NewCreateReportJob(context.TODO(), repository, queueSvc, cfg.PrepareDataConfig),
+	svc.AddJob("create.report",
+		job.NewDataJob(context.Background(), repository, queueSvc, cfg.PrepareDataConfig),
+	)
+	svc.AddJob("prepare.data",
+		job.NewDataJob(context.Background(), repository, queueSvc, cfg.PrepareDataConfig),
 	)
 
 	lc.Append(fx.Hook{
