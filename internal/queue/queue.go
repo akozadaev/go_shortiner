@@ -99,7 +99,7 @@ func (q *Queue) processTask(task *model.JobQueue) error {
 		return err
 	}
 
-	log.Printf("[INFO] Start job %s...\n", task.ID)
+	log.Printf("[INFO] Start job %v...\n", task.ID)
 
 	if err := job.Process(*task); err != nil {
 		return fmt.Errorf("cannot process job %v: %v", task.ID, err)

@@ -7,6 +7,7 @@ import (
 	"go_shurtiner/internal/app/model"
 	"go_shurtiner/internal/app/repository"
 	"go_shurtiner/pkg/config"
+	"go_shurtiner/pkg/report"
 	"time"
 )
 
@@ -48,7 +49,6 @@ func (j *DataJob) Process(job model.JobQueue) error {
 	}
 
 	if "prepare.data" == job.Name {
-		fmt.Println("+++++++++++++++++++++++++++++++++++++++++++++++")
 		links := make([]model.Link, 0)
 		links, err = j.repository.PrepareReportData(j.ctx)
 		cntUsers := 0
@@ -83,7 +83,16 @@ func (j *DataJob) Process(job model.JobQueue) error {
 	}
 
 	if "create.report" == job.Name {
-		fmt.Println("+++++++++++++++++++++++++++++++++++++++++++++++")
+		var prepadredReportData *[]model.PreparedReport
+		now := time.Now()
+		previousMonth := now.AddDate(0, -1, 0)
+		prepadredReportData, err = j.repository.GetReportData(j.ctx, previousMonth)
+
+		err = report.NewStatReport().GenerateReport(prepadredReportData)
+		if err != nil {
+			fmt.Println("ERROR")
+			return err
+		}
 
 	}
 

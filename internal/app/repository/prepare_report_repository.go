@@ -13,6 +13,7 @@ type ReportRepository interface {
 	PrepareReportData(ctx context.Context) ([]model.Link, error)
 	SaveReportData(ctx context.Context, reportData *model.PreparedReport) error
 	GetReportData(ctx context.Context, startDate time.Time) (*[]model.PreparedReport, error)
+	CreateReport(ctx context.Context, startDate time.Time) (*[]model.PreparedReport, error)
 }
 
 func NewReportRepository(db *gorm.DB) ReportRepository {
@@ -50,6 +51,18 @@ func (p prepareReportRepository) SaveReportData(ctx context.Context, reportData 
 }
 
 func (p prepareReportRepository) GetReportData(ctx context.Context, startDate time.Time) (*[]model.PreparedReport, error) {
+	logger := logging.FromContext(ctx)
+	db := database2.FromContext(ctx, p.db)
+	var err error
+	var report []model.PreparedReport
+	if err = db.WithContext(ctx).Find(&report /*, fmt.Sprintf("created_at <= timestamptz(%d)", startDate)*/).Error; err != nil {
+		//if err = db.WithContext(ctx).Find(&report,"created_at >= 2025-03-15T12:00:00Z").Error; err != nil {
+		logger.Errorw("failed to get report data", "err", err)
+	}
+
+	return &report, err
+}
+func (p prepareReportRepository) CreateReport(ctx context.Context, startDate time.Time) (*[]model.PreparedReport, error) {
 	logger := logging.FromContext(ctx)
 	db := database2.FromContext(ctx, p.db)
 	var err error
