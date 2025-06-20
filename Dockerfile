@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+
 FROM golang:1.23 AS builder
 
 WORKDIR /app
@@ -8,20 +9,25 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o shortiner ./cmd/go_shurtiner/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go_shurtiner ./cmd/go_shurtiner/main.go
 
-FROM debian:bookworm-slim
+FROM alpine:latest
+
+RUN adduser -D -u 10001 user
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/go_shurtiner ./shurtiner
+COPY ./config/config.docker.yaml ./config/config.local.yaml
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-COPY --from=builder /app/shortiner .
+RUN mkdir -p /app/logs && chown -R user:user /app
+RUN chmod +rw /app/*
 
- COPY ./config/config.local.yaml ./config/
+#USER user
 
-ENV DB_DSN="host=localhost user=short password=short dbname=short port=5433 sslmode=disable TimeZone=Europe/Moscow"
+EXPOSE 8080
 
-EXPOSE 2025
-
-CMD ["./shortiner"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["./shurtiner"]

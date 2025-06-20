@@ -34,4 +34,5 @@ trace:
   trace_service_name: "URL-SHORTINER"
   trace_is_http_body_enabled: true
 prepare_data:
-  time_range: "20m"
+#  time_range: "20m"
+  time_range: "2m"

@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  readTimeout: 15s
+  writeTimeout: 15m
+  gracefulShutdown: 30s
+  host: "https://short.ru/"
+  goroutineTimeout: "5s" #время жизни go-routine для устранения зависания рутин при множественных запросах
+db:
+  dataSourceName: "host=localhost user=short password=short dbname=short port=5432 sslmode=disable TimeZone=Europe/Moscow"
+  logLevel: 2
+  pool:
+    maxOpen: 50
+    maxIdle: 20
+    maxLifetime: "5m"
+logging:
+  level: -1
+  encoding: console
+  development: true
+  infoLevel:
+    filename: "logs/application.log"
+    maxSize: 100
+    maxBackups: 30
+    maxAge: 90
+    compress: true
+  errorLevel:
+    filename: "logs/application_error.log"
+    maxSize: 100
+    maxBackups: 30
+    maxAge: 90
+    compress: true
+trace:
+  is_enabled: true
+  trace_url: "http://localhost:14268/api/traces"
+  trace_service_name: "URL-SHORTINER"
+  trace_is_http_body_enabled: true
+prepare_data:
+#  time_range: "20m"
+  time_range: "2m"
