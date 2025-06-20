@@ -6,7 +6,7 @@ server:
   host: "https://short.ru/"
   goroutineTimeout: "5s" #время жизни go-routine для устранения зависания рутин при множественных запросах
 db:
-  dataSourceName: "host=localhost user=short password=short dbname=short port=5432 sslmode=disable TimeZone=Europe/Moscow"
+  dataSourceName: "host=localhost user=short password=short dbname=short port=5434 sslmode=disable TimeZone=Europe/Moscow"
   logLevel: 2
   pool:
     maxOpen: 50
