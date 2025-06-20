@@ -22,6 +22,8 @@ COPY ./config/config.docker.yaml ./config/config.local.yaml
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY migrations /app/migrations
+
 RUN mkdir -p /app/logs && chown -R user:user /app
 RUN chmod +rw /app/*
 
