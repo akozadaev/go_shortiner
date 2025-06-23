@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockery --name=UserRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_shorten_repository.go
 type ShortenRepository interface {
 	SaveLink(ctx context.Context, link *model.Link) error
 	FindLink(ctx context.Context, shortened string) (model.Link, error)

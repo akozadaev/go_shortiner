@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//go:generate mockery --name=UserRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_report_repository.go
 type ReportRepository interface {
 	PrepareReportData(ctx context.Context) ([]model.Link, error)
 	SaveReportData(ctx context.Context, reportData *model.PreparedReport) error

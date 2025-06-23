@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	//docs "github.com/go_shurtiner/docs"
 	"github.com/rs/zerolog/log"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	docs "go_shurtiner/docs"
 	"go_shurtiner/internal/app/authentication"
 	"go_shurtiner/internal/app/model"
 	repository "go_shurtiner/internal/app/repository"
@@ -15,7 +19,7 @@ import (
 	"go_shurtiner/pkg/config"
 	"go_shurtiner/pkg/logging"
 	trace "go_shurtiner/pkg/trace"
-	//"gopkg.in/guregu/null.v4"
+
 	"io"
 	"net/http"
 	//"time"
@@ -41,6 +45,16 @@ func NewHandler(
 	}
 }
 
+// getLink godoc
+// @Summary Получить информацию по сокращённой ссылке
+// @Description Поиск оригинальной ссылки по короткому идентификатору.
+// @Tags link
+// @Accept json
+// @Produce json
+// @Param link path string true "Идентификатор сокращённой ссылки"
+// @Success 200 {object} model.Link "Успешный ответ с полной информацией о ссылке"
+// @Failure 400 {object} handler.ErrorResponse "Внутренняя ошибка сервера"
+// @Router /{link} [get]
 func (h *Handler) getLink(c *gin.Context) {
 	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
@@ -97,6 +111,16 @@ func (h *Handler) getLinks(c *gin.Context) {
 	})
 }
 
+// getUsers godoc
+// @Summary Получить информацию по пользователям
+// @Description Информация о всех зарегистрированных пользователях
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param offset query int false "Смещение пагинации"
+// @Success 200 {object} []model.UserApi "Успешный ответ с информацией о пользователе без авторизационных данных"
+// @Failure 400 {object} handler.ErrorResponse "Внутренняя ошибка сервера"
+// @Router /{users} [get]
 func (h *Handler) getUsers(c *gin.Context) {
 	handler.HandleRequest(c, h.cfg.ServerConfig.GoroutineTimeout, func(c *gin.Context) *handler.Response {
 		logger := logging.FromContext(c)
@@ -278,6 +302,14 @@ func RouteV1(cfg *config.Config, h *Handler, r *gin.Engine, auth authentication.
 	if err != nil {
 		log.Error().Stack().Err(err)
 	}
+
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+	ginSwagger.WrapHandler(swaggerfiles.Handler,
+		ginSwagger.URL("http://localhost:8080/swagger/index.html"),
+		ginSwagger.DefaultModelsExpandDepth(-1))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	v1.Use(client.MiddleWareTrace())
 	{
 		v1.GET("/short/:link", h.getLink)

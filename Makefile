@@ -12,3 +12,8 @@ release:
 
 lint:
 	gofmt -l .
+
+doc:
+	go install github.com/swaggo/swag/cmd/swag@latest
+	swag init -d ./cmd/go_shurtiner/ -o ./docs --pd
+

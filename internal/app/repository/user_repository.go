@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockery --name=UserRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_user_repository.go
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *model.User) error
 	GetUserForApi(ctx context.Context, email string) (*model.UserApi, error)

@@ -3,11 +3,17 @@ package config
 import (
 	"log"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
+)
+
+var (
+	instance *Config
+	once     sync.Once
 )
 
 type Config struct {
@@ -92,4 +98,25 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	return &cfg, err
+}
+
+func GetInstance() *Config {
+	var err error
+	once.Do(func() {
+		instance, err = loadConfig()
+		if err != nil {
+			panic(err)
+		}
+	})
+
+	return instance
+}
+
+func loadConfig() (*Config, error) {
+	config, err := Load()
+	if err != nil {
+		return nil, err
+	}
+
+	return config, nil
 }

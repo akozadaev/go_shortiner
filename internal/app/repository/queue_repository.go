@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockery --name=UserRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_queue_repository.go
 func NewQueueRepository(db *gorm.DB) *queueRepository {
 	return &queueRepository{db: db}
 }

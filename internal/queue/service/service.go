@@ -35,20 +35,15 @@ func (s *QueueService) CompleteJob(ctx context.Context, job model.JobQueue) (mod
 	return s.repository.CompleteJob(ctx, job)
 }
 
-func (s *QueueService) NextJob(name string, startAfter time.Duration, payload any) error {
-	params, err := json.Marshal(payload)
-	if err != nil {
-		return err
-	}
-
+func (s *QueueService) NextJob(name string, startAfter time.Duration, payload json.RawMessage) error {
 	queueJob := model.JobQueue{
 		Name:               name,
-		Params:             params,
+		Params:             payload,
 		ScheduledStartedAt: time.Now().Unix(),
 		LaunchedAt:         null.IntFrom(time.Now().Add(startAfter).Unix()),
 	}
 
-	err = s.repository.CreateJob(context.Background(), &queueJob)
+	err := s.repository.CreateJob(context.Background(), &queueJob)
 	if err != nil {
 		return err
 	}
@@ -56,20 +51,15 @@ func (s *QueueService) NextJob(name string, startAfter time.Duration, payload an
 	return nil
 }
 
-func (s *QueueService) CreateJob(ctx context.Context, name string, startAfter time.Duration, payload any) (model.JobQueue, error) {
+func (s *QueueService) CreateJob(ctx context.Context, name string, startAfter time.Duration, payload json.RawMessage) (model.JobQueue, error) {
 	queueJob := model.JobQueue{
 		Name:               name,
 		ScheduledStartedAt: time.Now().Add(startAfter).Unix(),
 	}
 
-	params, err := json.Marshal(payload)
-	if err != nil {
-		return queueJob, err
-	}
+	queueJob.Params = payload
 
-	queueJob.Params = params
-
-	err = s.repository.CreateJob(ctx, &queueJob)
+	err := s.repository.CreateJob(ctx, &queueJob)
 	if err != nil {
 		return queueJob, err
 	}

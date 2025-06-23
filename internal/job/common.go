@@ -12,7 +12,7 @@ import (
 )
 
 type QueueService interface {
-	NextJob(name string, startAfter time.Duration, payload any) error
+	NextJob(name string, startAfter time.Duration, payload json.RawMessage) error
 }
 
 type DataJobPayload struct {
@@ -41,12 +41,7 @@ func NewDataJob(
 }
 
 func (j *DataJob) Process(job model.JobQueue) error {
-	var payload DataJobPayload
 	var err error
-	err = json.Unmarshal(job.Params, &payload)
-	if err != nil {
-		return fmt.Errorf("cannot load job params: %v", err)
-	}
 
 	if "prepare.data" == job.Name {
 		links := make([]model.Link, 0)
@@ -75,17 +70,25 @@ func (j *DataJob) Process(job model.JobQueue) error {
 
 		output := Output{Count: len(links), Users: cntUsers}
 		jsonData, _ := json.Marshal(output)
-		jsonString := fmt.Sprintf("%s", string(jsonData))
-		payload := DataJobPayload{Data: jsonString}
-		json.Unmarshal([]byte(payload.Data), &output)
 
-		err = j.queueService.NextJob(job.Name, j.cfg.TimeRange, output)
+		err = j.queueService.NextJob(job.Name, j.cfg.TimeRange, jsonData)
 	}
 
 	if "create.report" == job.Name {
 		var prepadredReportData *[]model.PreparedReport
 		now := time.Now()
 		previousMonth := now.AddDate(0, -1, 0)
+		var result map[string]json.RawMessage
+
+		err := json.Unmarshal([]byte(job.Params), &result)
+		if err != nil {
+			fmt.Println("Ошибка:", err)
+		}
+
+		fmt.Println("resultresultresultresultresult")
+		fmt.Println(result)
+		fmt.Println("resultresultresultresultresult")
+		// Для параметров предусмотрено job.Params, но в рамках данной реализации просто за месяц
 		prepadredReportData, err = j.repository.GetReportData(j.ctx, previousMonth)
 
 		err = report.NewStatReport().GenerateReport(prepadredReportData)
