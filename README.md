@@ -25,6 +25,7 @@ Gin Web Framework, Fx
 Zap, Jaeger
 ![img.png](docs/logs.png)
 
+
 ## Показывает работу с паттерном проектирования  Medaitor
 
 Метод с общим названием Generate
@@ -145,6 +146,13 @@ Zap, Jaeger
 7. [POST] /v2/report
    Постановка отложенной задачи на генерацию отчета
    Пример отчета [report_13-06-2025_at_21:00_UTC+03:00.xlsx](reports%2Freport_13-06-2025_at_21%3A00_UTC%2B03%3A00.xlsx)
+
+
+Контракт описан в swagger, открывается в браузере после запуска приложения
+
+http://localhost:8080/swagger/v1/index.html и
+http://localhost:8080/swagger/v2/index.html
+![img.png](docs/img.png)
 
 ___
 Справочно:
