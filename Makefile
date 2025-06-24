@@ -15,5 +15,7 @@ lint:
 
 doc:
 	go install github.com/swaggo/swag/cmd/swag@latest
-	swag init -d ./cmd/go_shurtiner/ -o ./docs --pd
+	swag init -g cmd/go_shurtiner/main.go --pd --parseGoList=false --parseDepth=2 -o ./docs/v1 --instanceName v1
+	swag init -g cmd/go_shurtiner/main.go --pd --parseGoList=false --parseDepth=2 -o ./docs/v2 --instanceName v2
+
 

@@ -40,8 +40,8 @@ var serverCmd = &cobra.Command{
 // @version 1.0
 // @description Go Shurtiner API Swagger
 // @host localhost:8080
-// @BasePath /
 // @schemes http
+// @contact akozadaev@inbox.ru
 func main() {
 	if err := serverCmd.Execute(); err != nil {
 		log.Printf("failed to execute command. err: %v", err)

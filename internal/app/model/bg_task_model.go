@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/knadh/koanf/parsers/json"
 	"gorm.io/datatypes"
 )
 
@@ -14,6 +15,12 @@ type Task struct {
 	ProcessAt   *int64         `gorm:"column:process_at;type:bigint" json:"process_at,omitempty"`
 	ExpireAt    *int64         `gorm:"column:expire_at;type:bigint" json:"expire_at,omitempty"`
 	CompletedAt *int64         `gorm:"column:completed_at;type:bigint" json:"completed_at,omitempty"`
+}
+
+type Params struct {
+	Name                string
+	Params              json.JSON
+	ScheduledStarted_at int
 }
 
 func (u *Task) TableName() string {
