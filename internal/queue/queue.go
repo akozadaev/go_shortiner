@@ -107,7 +107,7 @@ func (q *Queue) processTask(task *model.JobQueue) error {
 
 	_, err = q.queueService.CompleteJob(q.ctx, *task)
 	if err != nil {
-		return fmt.Errorf("cannot complete job %s: %v", task.ID, err)
+		return fmt.Errorf("cannot complete job %v: %v", task.ID, err)
 	}
 
 	log.Printf("[INFO] Finished job %v\n", task.ID)

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//go:generate mockery --name=AuthenticationMiddleware --output=../../../test/mocks --outpkg=mocks --filename=mock_authentication_middleware.go
 func AuthenticationMiddleware(auth authentication.Authentication) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err := auth.Authenticate(c.Request)

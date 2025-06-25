@@ -8,7 +8,7 @@ import (
 )
 
 const User = "user"
-
+//go:generate mockery --name=Authentication --output=../../../test/mocks --outpkg=mocks --filename=mock_authentication.go
 type Authentication interface {
 	Authenticate(r *http.Request) (*user_model.User, error)
 	UnauthorizedResponse(err error) UnauthorizedResponse

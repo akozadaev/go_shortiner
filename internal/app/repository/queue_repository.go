@@ -11,7 +11,9 @@ import (
 	"gorm.io/gorm"
 )
 
-//go:generate mockery --name=UserRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_queue_repository.go
+// ERR Unable to find 'QueueRepository' in any go files under this path dry-run=false version=v2.53.4
+//
+//go:generate mockery --name=QueueRepository --output=../../../test/mocks --outpkg=mocks --filename=mock_queue_repository.go
 func NewQueueRepository(db *gorm.DB) *queueRepository {
 	return &queueRepository{db: db}
 }
