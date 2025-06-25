@@ -37,7 +37,11 @@ Zap, Jaeger
 Если хотите использовать другую имя БД и пароль, поменяйте их в файле
 конфигурации [config.local.yaml](config%2Fconfig.local.yaml)
 
-Или в контейнере: `sudo usermod -aG docker $USER
+Или в контейнере:
+
+```$ sudo usermod -aG docker $USER```
+
+```$ docker-compose up --force-recreate```
 ### Роуты:
 
 1. [POST] /v1/short
