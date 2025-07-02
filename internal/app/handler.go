@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	//docs "github.com/go_shurtiner/docs"
+	// docs "github.com/go_shurtiner/docs"
 	"github.com/rs/zerolog/log"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,7 +23,7 @@ import (
 
 	"io"
 	"net/http"
-	//"time"
+	// "time"
 )
 
 type Handler struct {
@@ -246,7 +246,7 @@ func (h *Handler) createLinkByUser(c *gin.Context) {
 		}
 
 		links := make([]model.CreateLink, 0)
-		body, err := io.ReadAll(c.Request.Body)
+		body, _ := io.ReadAll(c.Request.Body)
 		if !helper.RequestHasJsonArray(body) {
 			var link model.CreateLink
 			err = json.Unmarshal(body, &link)
@@ -315,7 +315,7 @@ func (h *Handler) setBackgroundTaskAsJob(c *gin.Context) {
 		}
 
 		queueJobs := make([]model.JobQueue, 0)
-		body, err := io.ReadAll(c.Request.Body)
+		body, _ := io.ReadAll(c.Request.Body)
 		if !helper.RequestHasJsonArray(body) {
 			var queueJob model.JobQueue
 			err = json.Unmarshal(body, &queueJob)
@@ -324,7 +324,13 @@ func (h *Handler) setBackgroundTaskAsJob(c *gin.Context) {
 				c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 				return handler.NewInternalErrorResponse(err)
 			}
-			h.queueJobRepository.CreateJob(c, &queueJob)
+
+			err = h.queueJobRepository.CreateJob(c, &queueJob)
+			if err != nil {
+				_ = c.Error(err)
+				c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+				return handler.NewInternalErrorResponse(err)
+			}
 			queueJobs = append(queueJobs, queueJob)
 		}
 
@@ -373,7 +379,7 @@ func RouteV2(cfg *config.Config, h *Handler, r *gin.Engine, auth authentication.
 	v2.Use(client.MiddleWareTrace())
 
 	{
-		//docs.SwaggerInfo.BasePath = "/v2"
+		// docs.SwaggerInfo.BasePath = "/v2"
 		v2.POST("/short", h.createLinkByUser)
 		v2.GET("/user/:id", h.getUser)
 		v2.GET("/users", h.getUsers)

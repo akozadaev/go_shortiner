@@ -25,7 +25,7 @@ type queueRepository struct {
 
 func (a *queueRepository) GetQueue(ctx context.Context) (model.JobQueue, error) {
 	db := database.FromContext(ctx, a.db)
-	//CTE для того, чтобы не использовать UPDATE напрямую
+	// CTE для того, чтобы не использовать UPDATE напрямую
 	sql := `
 WITH cte_next_job AS
 	(SELECT id

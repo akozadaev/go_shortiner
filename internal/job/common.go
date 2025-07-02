@@ -56,10 +56,16 @@ func (j *DataJob) Process(job model.JobQueue) error {
 				reportData.UserEmail = u.Email
 				reportData.UserFullName = fmt.Sprintf("%s %s %s", u.LastName, u.Name, u.MiddleName)
 				err = j.repository.SaveReportData(j.ctx, &reportData)
+				if err != nil {
+					fmt.Println("Ошибка:", err)
+				}
 				cntUsers++
 			}
 			if len(link.User) == 0 {
 				err = j.repository.SaveReportData(j.ctx, &reportData)
+				if err != nil {
+					fmt.Println("Ошибка:", err)
+				}
 			}
 		}
 
@@ -80,7 +86,7 @@ func (j *DataJob) Process(job model.JobQueue) error {
 		previousMonth := now.AddDate(0, -1, 0)
 		var result map[string]json.RawMessage
 
-		err := json.Unmarshal([]byte(job.Params), &result)
+		err = json.Unmarshal([]byte(job.Params), &result)
 		if err != nil {
 			fmt.Println("Ошибка:", err)
 		}
@@ -89,7 +95,7 @@ func (j *DataJob) Process(job model.JobQueue) error {
 		fmt.Println(result)
 		fmt.Println("resultresultresultresultresult")
 		// Для параметров предусмотрено job.Params, но в рамках данной реализации просто за месяц
-		prepadredReportData, err = j.repository.GetReportData(j.ctx, previousMonth)
+		prepadredReportData, _ = j.repository.GetReportData(j.ctx, previousMonth)
 
 		err = report.NewStatReport().GenerateReport(prepadredReportData)
 		if err != nil {

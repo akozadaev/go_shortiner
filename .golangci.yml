@@ -1,0 +1,54 @@
+version: "2"
+
+run:
+  timeout: 3m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  default: none
+  enable:
+    - govet
+    - errcheck
+#    - ineffassign
+    - gocritic
+    - bodyclose
+#    - gosec
+    - prealloc
+#    - revive
+    - dupl
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    exclude-functions: 'defer .*Close'
+
+  gocritic:
+    enabled-checks:
+      - paramTypeCombine
+
+  revive:
+    rules:
+      - name: indent-error-flow
+        severity: error
+      - name: var-naming
+        severity: warning
+      - name: exported
+        severity: warning
+
+issues:
+  max-same-issues: 5
+  exclude-use-default: false
+  exclude:
+    - "error return value not checked.*"
+    - "should have comment or be unexported"
+    - "cyclomatic complexity"
+
+exclude-rules:
+  - linters:
+      - dupl
+    text: "duplicated code"
+
+output:
+  formats:
+    colored-line-number: true

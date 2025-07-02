@@ -17,6 +17,7 @@ type ReportService struct {
 	repository ReportRepository
 }
 
+// NewReportService фабрика сервиса отчетов
 func NewReportService(repo ReportRepository) *ReportService {
 	return &ReportService{
 		repository: repo,

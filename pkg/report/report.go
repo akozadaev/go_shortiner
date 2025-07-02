@@ -121,8 +121,8 @@ func (r *statReport) GenerateReport(data *[]model.PreparedReport) error {
 		} else {
 			fullNameCell = excelize.Cell{Value: fullName, StyleID: stylesExcelize[helper.ReportStringStyle]}
 		}
-
-		cell, err := excelize.CoordinatesToCellName(1, rowInd)
+		var cell string
+		cell, err = excelize.CoordinatesToCellName(1, rowInd)
 		if err = streamWriter.SetRow(cell,
 			[]interface{}{
 				excelize.Cell{Value: row.UserEmail, StyleID: stylesExcelize[helper.ReportStringStyle]},

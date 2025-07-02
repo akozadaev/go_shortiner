@@ -57,7 +57,7 @@ func (p prepareReportRepository) GetReportData(ctx context.Context, startDate ti
 	var err error
 	var report []model.PreparedReport
 	if err = db.WithContext(ctx).Find(&report /*, fmt.Sprintf("created_at <= timestamptz(%d)", startDate)*/).Error; err != nil {
-		//if err = db.WithContext(ctx).Find(&report,"created_at >= 2025-03-15T12:00:00Z").Error; err != nil {
+		// if err = db.WithContext(ctx).Find(&report,"created_at >= 2025-03-15T12:00:00Z").Error; err != nil {
 		logger.Errorw("failed to get report data", "err", err)
 	}
 
@@ -69,7 +69,7 @@ func (p prepareReportRepository) CreateReport(ctx context.Context, startDate tim
 	var err error
 	var report []model.PreparedReport
 	if err = db.WithContext(ctx).Find(&report /*, fmt.Sprintf("created_at <= timestamptz(%d)", startDate)*/).Error; err != nil {
-		//if err = db.WithContext(ctx).Find(&report,"created_at >= 2025-03-15T12:00:00Z").Error; err != nil {
+		// if err = db.WithContext(ctx).Find(&report,"created_at >= 2025-03-15T12:00:00Z").Error; err != nil {
 		logger.Errorw("failed to get report data", "err", err)
 	}
 

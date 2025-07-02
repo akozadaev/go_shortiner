@@ -11,7 +11,7 @@ import (
 
 func TestAppStartsAndHandlesRoot(t *testing.T) {
 	app := fxtest.New(t,
-		Module,
+		module,
 	)
 
 	app.RequireStart()
@@ -22,7 +22,11 @@ func TestAppStartsAndHandlesRoot(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Ошибка при GET /: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func(resp *http.Response) {
+		_ = resp.Body.Close()
+		_ = resp.Close
+
+	}(resp)
 
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Ожидался статус 200 OK, получено: %d", resp.StatusCode)

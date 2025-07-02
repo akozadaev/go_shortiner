@@ -51,11 +51,11 @@ func (r userRepository) GetUserForApi(ctx context.Context, email string) (*model
 		logger.Errorw("failed to get user for API", "err", err)
 	}
 	result := model.UserApi{
-		user.Model,
-		user.Name,
-		user.LastName,
-		user.MiddleName,
-		user.Email}
+		Model:      user.Model,
+		Name:       user.Name,
+		LastName:   user.LastName,
+		MiddleName: user.MiddleName,
+		Email:      user.Email}
 	return &result, err
 }
 
@@ -68,11 +68,11 @@ func (r userRepository) GetUserForApiById(ctx context.Context, id string) (*mode
 		logger.Errorw("failed to get user for API by id", "err", err)
 	}
 	result := model.UserApi{
-		user.Model,
-		user.Name,
-		user.LastName,
-		user.MiddleName,
-		user.Email}
+		Model:      user.Model,
+		Name:       user.Name,
+		LastName:   user.LastName,
+		MiddleName: user.MiddleName,
+		Email:      user.Email}
 	return &result, err
 }
 
@@ -104,11 +104,11 @@ func (r userRepository) FetchUsers(ctx context.Context) ([]model.UserApi, error)
 
 	for _, user := range users {
 		result = append(result, model.UserApi{
-			user.Model,
-			user.Name,
-			user.LastName,
-			user.MiddleName,
-			user.Email})
+			Model:      user.Model,
+			Name:       user.Name,
+			LastName:   user.LastName,
+			MiddleName: user.MiddleName,
+			Email:      user.Email})
 	}
 
 	return result, err

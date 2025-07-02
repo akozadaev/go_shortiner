@@ -10,6 +10,8 @@ import (
 const DefaultLanguage = "ru"
 const DefaultTimeZone = "Europe/Moscow"
 const ReportStringStyle string = "string"
+
+// ReportStringGrayStyle добавляет серый текст
 const ReportStringGrayStyle string = "string_gray"
 const ReportDateStyle string = "date"
 const ReportDateTimeStyle string = "date_time"
@@ -104,7 +106,7 @@ func GetReportExcelizeStyles(file *excelize.File) (map[string]int, error) {
 	}
 	styles[ReportTimeStyle] = timeStyle
 
-	fmtTimeAsString := "@" //49
+	fmtTimeAsString := "@" // 49
 	timeAsStringStyle, err := file.NewStyle(&excelize.Style{CustomNumFmt: &fmtTimeAsString, Font: &excelize.Font{Bold: false, Size: reportDefaultFontSize, Family: fontFamily},
 		Alignment: &excelize.Alignment{
 			Horizontal: "right",
@@ -114,7 +116,7 @@ func GetReportExcelizeStyles(file *excelize.File) (map[string]int, error) {
 	}
 	styles[ReportTimeAsStringStyle] = timeAsStringStyle
 
-	fmtStr := "@" //49
+	fmtStr := "@" // 49
 	stringStyle, err := file.NewStyle(&excelize.Style{CustomNumFmt: &fmtStr, Font: &excelize.Font{Bold: false, Size: reportDefaultFontSize, Family: fontFamily}})
 	if err != nil {
 		return nil, err
@@ -210,7 +212,7 @@ func SetSheetHeader(streamWrite *excelize.StreamWriter, headers any, styleHeader
 	return cnt, err
 }
 
-// Добавление автофильтров на указанном листе от ячейки A1 до ячейки с индекксами colInd, rowInd
+// AutoFilter Добавление автофильтров на указанном листе от ячейки A1 до ячейки с индекксами colInd, rowInd
 func AutoFilter(file *excelize.File, sheetName string, colInd, rowInd int) error {
 	cell, err := excelize.CoordinatesToCellName(colInd, rowInd)
 	if err != nil {

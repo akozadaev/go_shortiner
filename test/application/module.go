@@ -5,6 +5,7 @@ import (
 	"go.uber.org/fx"
 	"log"
 	"net/http"
+	"time"
 )
 
 const port = ":8080"
@@ -13,19 +14,20 @@ func NewMux() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Hello, world!"))
+		_, _ = w.Write([]byte("Hello, world!"))
 	})
 	return mux
 }
 
 func StartServer(lc fx.Lifecycle, mux *http.ServeMux) {
 	server := &http.Server{
-		Addr:    port,
-		Handler: mux,
+		Addr:              port,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
 	}
 
 	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
+		OnStart: func(_ context.Context) error {
 			go func() {
 				log.Println("Starting server on " + port)
 				if err := server.ListenAndServe(); err != http.ErrServerClosed {
@@ -41,7 +43,7 @@ func StartServer(lc fx.Lifecycle, mux *http.ServeMux) {
 	})
 }
 
-var Module = fx.Options(
+var module = fx.Options(
 	fx.Provide(NewMux),
 	fx.Invoke(StartServer),
 )

@@ -62,15 +62,15 @@ func NewTraceClient() (*Tracer, error) {
 	}
 
 	tp := tracesdk.NewTracerProvider(
-		//tracesdk.WithSampler(),
+		// tracesdk.WithSampler(),
 		// Always be sure to batch in production.
 		tracesdk.WithBatcher(exp),
 		// Record information about this application in a Resource.
 		tracesdk.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
 			semconv.ServiceNameKey.String(t.cfg.ServiceName),
-			//attribute.String("environment", "development"),
-			//attribute.Int64("ID", 1),
+			// attribute.String("environment", "development"),
+			// attribute.Int64("ID", 1),
 		)),
 	)
 
@@ -89,10 +89,12 @@ func (t *Tracer) Shutdown(ctx context.Context) error {
 	return t.tp.Shutdown(ctx)
 }
 
+// InjectHttpTraceId сгенерированный  метод для тестирования
 func (t *Tracer) InjectHttpTraceId(ctx context.Context, req *http.Request) {
 	otel.GetTextMapPropagator().Inject(ctx, propagation.HeaderCarrier(req.Header))
 }
 
+// MiddleWareTrace сгенерированный  метод для тестирования
 func (t *Tracer) MiddleWareTrace() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if t == nil || !t.cfg.IsTraceEnabled {
@@ -129,6 +131,7 @@ func (t *Tracer) MiddleWareTrace() gin.HandlerFunc {
 	}
 }
 
+// CreateSpan сгенерированный  метод для тестирования
 func (t *Tracer) CreateSpan(ctx context.Context, name string, fun string) (context.Context, trace2.Span) {
 	if t == nil || t.tp == nil {
 		return context.Background(), noop.Span{}

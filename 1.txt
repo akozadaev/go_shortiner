@@ -1,0 +1,427 @@
+ERRO [linters_context/goanalysis] buildir: panic during analysis: Cannot range over: func(yield func(K, V) bool), goroutine 4925 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x17b03e0?, 0xc0000c3020?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/go/ir.(*builder).rangeStmt(0xc001149910, 0xc001d7cc80, 0xc002876cc0, 0x0, {0x1cb9c10, 0xc002876cc0})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2225 +0x894
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc001149910, 0xc001d7cc80, {0x1cbe598?, 0xc002876cc0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2438 +0x20a
+honnef.co/go/tools/go/ir.(*builder).stmtList(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:859
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc001149910, 0xc001d7cc80, {0x1cbe4a8?, 0xc001bd86c0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2396 +0x1415
+honnef.co/go/tools/go/ir.(*builder).buildFunction(0xc001149910, 0xc001d7cc80)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2508 +0x417
+honnef.co/go/tools/go/ir.(*builder).buildFuncDecl(0xc001149910, 0xc0002d7b90, 0xc001bd86f0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2545 +0x189
+honnef.co/go/tools/go/ir.(*Package).build(0xc0002d7b90)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2649 +0xb46
+sync.(*Once).doSlow(0xc0023da2a0?, 0xc0028775c0?)
+        /usr/local/go/src/sync/once.go:76 +0xb4
+sync.(*Once).Do(...)
+        /usr/local/go/src/sync/once.go:67
+honnef.co/go/tools/go/ir.(*Package).Build(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2567
+honnef.co/go/tools/internal/passes/buildir.run(0xc0023da1c0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/internal/passes/buildir/buildir.go:86 +0x18b
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc003217b70)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19de059, 0x7}, 0xc001b78748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4a80?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc003217b70)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1093
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] fact_purity: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4923 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc001f47530?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/purity.purity(0xc001fe47e0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/purity/purity.go:109 +0x299
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc00321e770)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x1a27d90, 0xb}, 0xc001ac3748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4f00?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc00321e770)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1093
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] nilness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4926 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc001f47680?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/nilness.run(0xc001fe48c0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:65 +0x277
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032c37d0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d614f, 0x7}, 0xc0015c7f48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4a80?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032c37d0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1093
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] typedness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4929 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc001f477d0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/typedness.run(0xc001fe49a0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/typedness/typedness.go:59 +0x21d
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032bcb40)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19fb911, 0x9}, 0xc001b73f48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d5aa0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032bcb40)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1093
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] SA5012: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4924 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc001f478f0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/staticcheck.findSliceLenChecks(0xc001fe4a80)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4285 +0x668
+honnef.co/go/tools/staticcheck.CheckEvenSliceLength(0xc001fe4a80)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4523 +0x18
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032a1fc0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d3ca4, 0x6}, 0xc0019cdf48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4f00?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032a1fc0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1093
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] buildir: panic during analysis: Cannot range over: func(yield func(E) bool), goroutine 4945 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x17b03e0?, 0xc002f7e740?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/go/ir.(*builder).rangeStmt(0xc001145910, 0xc002f1f7c0, 0xc001d411a0, 0x0, {0x1cb9c10, 0xc001d411a0})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2225 +0x894
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc001145910, 0xc002f1f7c0, {0x1cbe598?, 0xc001d411a0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2438 +0x20a
+honnef.co/go/tools/go/ir.(*builder).stmtList(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:859
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc001145910, 0xc002f1f7c0, {0x1cbe4a8?, 0xc001e8a8d0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2396 +0x1415
+honnef.co/go/tools/go/ir.(*builder).buildFunction(0xc001145910, 0xc002f1f7c0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2508 +0x417
+honnef.co/go/tools/go/ir.(*builder).buildFuncDecl(0xc001145910, 0xc002c69cb0, 0xc001e8a900)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2545 +0x189
+honnef.co/go/tools/go/ir.(*Package).build(0xc002c69cb0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2649 +0xb46
+sync.(*Once).doSlow(0xc00113c0e0?, 0xc00204bda0?)
+        /usr/local/go/src/sync/once.go:76 +0xb4
+sync.(*Once).Do(...)
+        /usr/local/go/src/sync/once.go:67
+honnef.co/go/tools/go/ir.(*Package).Build(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2567
+honnef.co/go/tools/internal/passes/buildir.run(0xc00113c000)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/internal/passes/buildir/buildir.go:86 +0x18b
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc003213640)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19de059, 0x7}, 0xc001468748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4de0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc003213640)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1071
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] fact_purity: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 5251 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc003036240?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/purity.purity(0xc000df9500)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/purity/purity.go:109 +0x299
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc00321a240)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x1a27d90, 0xb}, 0xc0017e9748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4de0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc00321a240)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1071
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] typedness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4943 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc003036390?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/typedness.run(0xc000df95e0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/typedness/typedness.go:59 +0x21d
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032b8610)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19fb911, 0x9}, 0xc001bd3748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4a80?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032b8610)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1071
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] SA5012: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4941 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc0030364b0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/staticcheck.findSliceLenChecks(0xc000df96c0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4285 +0x668
+honnef.co/go/tools/staticcheck.CheckEvenSliceLength(0xc000df96c0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4523 +0x18
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc00329da90)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d3ca4, 0x6}, 0xc0015d3748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4a80?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc00329da90)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1071
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] nilness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 4940 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc003036600?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/nilness.run(0xc000df97a0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:65 +0x277
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032bf2a0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d614f, 0x7}, 0xc0013c1f48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0018d4fc0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032bf2a0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1071
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] buildir: panic during analysis: Cannot range over: func(yield func(*golang.org/x/net/html.Node) bool), goroutine 7519 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x17b03e0?, 0xc0042544d0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/go/ir.(*builder).rangeStmt(0xc006113910, 0xc00577eb40, 0xc0045cd620, 0x0, {0x1cb9c10, 0xc0045cd620})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2225 +0x894
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc006113910, 0xc00577eb40, {0x1cbe598?, 0xc0045cd620?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2438 +0x20a
+honnef.co/go/tools/go/ir.(*builder).stmtList(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:859
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc006113910, 0xc00577eb40, {0x1cbe4a8?, 0xc00498c7b0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2396 +0x1415
+honnef.co/go/tools/go/ir.(*builder).buildFunction(0xc006113910, 0xc00577eb40)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2508 +0x417
+honnef.co/go/tools/go/ir.(*builder).buildExits(0xc006113910, 0xc00403cb40)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/exits.go:214 +0x1385
+honnef.co/go/tools/go/ir.(*builder).buildFunction(0xc006113910, 0xc00403cb40)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2523 +0x48e
+honnef.co/go/tools/go/ir.(*builder).expr0(0xc006113910, 0xc00577ea00, {0x1cbe898?, 0xc00498a4b0}, {0x7, {0x1cb9918, 0xc002520c40}, {0x0, 0x0}})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:596 +0xb6b
+honnef.co/go/tools/go/ir.(*builder).expr(0xc006113910, 0xc00577ea00, {0x1cbe898, 0xc00498a4b0})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:571 +0x1a5
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc006113910, 0xc00577ea00, {0x1cbe448?, 0xc004989b00?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2349 +0x1565
+honnef.co/go/tools/go/ir.(*builder).stmtList(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:859
+honnef.co/go/tools/go/ir.(*builder).stmt(0xc006113910, 0xc00577ea00, {0x1cbe4a8?, 0xc00498c5d0?})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2396 +0x1415
+honnef.co/go/tools/go/ir.(*builder).buildFunction(0xc006113910, 0xc00577ea00)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2508 +0x417
+honnef.co/go/tools/go/ir.(*builder).buildFuncDecl(0xc006113910, 0xc0053310e0, 0xc00498c600)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2545 +0x189
+honnef.co/go/tools/go/ir.(*Package).build(0xc0053310e0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2649 +0xb46
+sync.(*Once).doSlow(0xc004750700?, 0xc0037e6240?)
+        /usr/local/go/src/sync/once.go:76 +0xb4
+sync.(*Once).Do(...)
+        /usr/local/go/src/sync/once.go:67
+honnef.co/go/tools/go/ir.(*Package).Build(...)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/go/ir/builder.go:2567
+honnef.co/go/tools/internal/passes/buildir.run(0xc004750620)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/internal/passes/buildir/buildir.go:86 +0x18b
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc003223870)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19de059, 0x7}, 0xc001a55748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0017a2720?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc003223870)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 2870
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] typedness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 7521 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc0030d04e0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/typedness.run(0xc0062ae9a0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/typedness/typedness.go:59 +0x21d
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032c8840)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19fb911, 0x9}, 0xc001aaaf48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0017a3f20?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032c8840)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 2870
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] fact_purity: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 7520 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc0030d0de0?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/purity.purity(0xc0062aea80)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/purity/purity.go:109 +0x299
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc003227650)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x1a27d90, 0xb}, 0xc00111ef48)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0017570e0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc003227650)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 2870
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] SA5012: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 7517 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc0030d0f00?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/staticcheck.findSliceLenChecks(0xc0062aeb60)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4285 +0x668
+honnef.co/go/tools/staticcheck.CheckEvenSliceLength(0xc0062aeb60)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/staticcheck/lint.go:4523 +0x18
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032a56e0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d3ca4, 0x6}, 0xc001d2f748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0017a2720?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032a56e0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 2870
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] nilness: panic during analysis: interface conversion: interface {} is nil, not *buildir.IR, goroutine 7516 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x185fd60?, 0xc0030d1050?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/nilness.run(0xc0062aec40)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:65 +0x277
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032cc6b0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d614f, 0x7}, 0xc0016dd748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc0017570e0?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032cc6b0)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 2870
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+ERRO [linters_context/goanalysis] nilness: panic during analysis: internal error: unhandled type *ir.ArrayConst, goroutine 7663 [running]:
+runtime/debug.Stack()
+        /usr/local/go/src/runtime/debug/stack.go:26 +0x5e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func1()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:105 +0x5a
+panic({0x17b03e0?, 0xc00465f410?})
+        /usr/local/go/src/runtime/panic.go:785 +0x132
+honnef.co/go/tools/analysis/facts/nilness.impl.func1({0x7d9bc84012f8, 0xc004641680})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:239 +0x8a5
+honnef.co/go/tools/analysis/facts/nilness.impl.func1({0x1ccb098, 0xc001c0d000})
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:147 +0x90e
+honnef.co/go/tools/analysis/facts/nilness.impl(0xc001c0b0a0, 0xc0047bb180, 0xc004cd7cb8)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:246 +0x32a
+honnef.co/go/tools/analysis/facts/nilness.run(0xc001c0b0a0)
+        /home/akozadaev/go/pkg/mod/honnef.co/go/tools@v0.4.7/analysis/facts/nilness/nilness.go:66 +0x125
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyze(0xc0032c2c00)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:191 +0x9cd
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe.func2()
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:113 +0x17
+github.com/golangci/golangci-lint/pkg/timeutils.(*Stopwatch).TrackStage(0xc0008c5d60, {0x19d614f, 0x7}, 0xc001a0c748)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/timeutils/stopwatch.go:111 +0x44
+github.com/golangci/golangci-lint/pkg/goanalysis.(*action).analyzeSafe(0xc00113b860?)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_action.go:112 +0x6e
+github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze.func2(0xc0032c2c00)
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:80 +0xa5
+created by github.com/golangci/golangci-lint/pkg/goanalysis.(*loadingPackage).analyze in goroutine 1548
+        /home/akozadaev/go/pkg/mod/github.com/golangci/golangci-lint@v1.59.0/pkg/goanalysis/runner_loadingpackage.go:75 +0x1e9
+WARN [runner] Can't run linter goanalysis_metalinter: the_only_name: cannot find rule: exports
+ERRO Running error: can't run linter goanalysis_metalinter
+the_only_name: cannot find rule: exports

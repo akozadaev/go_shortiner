@@ -28,6 +28,7 @@ var conf = &Config{
 	Development: true,
 }
 
+// Config структура конфигурации
 type Config struct {
 	Encoding        string
 	Level           zapcore.Level
@@ -64,6 +65,7 @@ func SetConfig(c *Config) {
 	}
 }
 
+// SetLevel для установки уровня логгирования по умолчанию. В планах на будущее
 func SetLevel(l zapcore.Level) {
 	conf.Level = l
 }
@@ -79,17 +81,17 @@ func NewLogger(conf *Config) *zap.SugaredLogger {
 
 	wsInfo := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   conf.InfoFilename,
-		MaxSize:    conf.InfoMaxSize, //MB
+		MaxSize:    conf.InfoMaxSize, // MB
 		MaxBackups: conf.InfoMaxBackups,
-		MaxAge:     conf.InfoMaxAge, //days
+		MaxAge:     conf.InfoMaxAge, // days
 		Compress:   conf.InfoCompress,
 	})
 
 	wsError := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   conf.ErrorFilename,
-		MaxSize:    conf.ErrorMaxSize, //MB
+		MaxSize:    conf.ErrorMaxSize, // MB
 		MaxBackups: conf.ErrorMaxBackups,
-		MaxAge:     conf.ErrorMaxAge, //days
+		MaxAge:     conf.ErrorMaxAge, // days
 		Compress:   conf.ErrorCompress,
 	})
 	coreInfo := zapcore.NewCore(
@@ -107,7 +109,9 @@ func NewLogger(conf *Config) *zap.SugaredLogger {
 	cores := zapcore.NewTee(coreInfo, coreError)
 
 	logger := zap.New(cores)
-	defer logger.Sync()
+	defer func(logger *zap.Logger) {
+		_ = logger.Sync()
+	}(logger)
 
 	return logger.Sugar()
 }

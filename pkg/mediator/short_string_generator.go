@@ -23,6 +23,7 @@ func (r *Base62) Generate(str string) string {
 	return strconv.FormatUint(nb, 10)
 }
 
+// Generate генерирует Md5
 func (r *Md5) Generate(str string) string {
 	hash := md5.Sum([]byte(str))
 	return hex.EncodeToString(hash[:])

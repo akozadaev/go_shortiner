@@ -101,7 +101,7 @@ func runApplication() {
 			fx.Annotate(
 				repository.NewQueueRepository,
 				fx.As(new(queueSvc.QueueRepository)),
-				//fx.As(new(reportSvc.ReportRepository)),
+				// fx.As(new(reportSvc.ReportRepository)),
 			),
 			fx.Annotate(
 				queueSvc.NewQueueService,
